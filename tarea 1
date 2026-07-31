@@ -1,0 +1,170 @@
+#pseudocodigos
+
+#Reto 1
+Algoritmo RetoVasos
+Definir vasoA, vasoB, vasoC Como Cadena
+
+vasoA <- "jugo"
+vasoB <- "agua"
+vasoC <- "vacio"
+
+Escribir "Vaso A = ", vasoA
+Escribir "Vaso B = ", vasoB
+Escribir "Vaso C = ", vasoC
+
+// Paso 1:
+vasoC <- vasoA
+vasoA <- "vacio"
+Escribir "A:", vasoA, " B:", vasoB, " C:", vasoC
+
+// Paso 2
+vasoA <- vasoB
+vasoB <- "vacio"
+Escribir "A:", vasoA, " B:", vasoB, " C:", vasoC
+
+// Paso 3:
+vasoB <- vasoC
+vasoC <- "vacio"
+Escribir "A:", vasoA, " B:", vasoB, " C:", vasoC
+
+Si vasoA = "agua" Y vasoB = "jugo" Entonces
+Escribir "A tiene agua, B tiene jugo"
+FinSi
+
+FinAlgoritmo
+
+#Reto 2
+Algoritmo RetoTriage
+Definir edad, minutosEspera Como Entero
+Definir tieneUrgencia Como Logico
+Definir prioridad Como Cadena
+
+Escribir "Ingrese la edad del paciente:"
+Leer edad
+Escribir "Tiene urgencia? (Verdadero = 1 /Falso = 0):"
+Leer tieneUrgencia
+Escribir "Minutos que lleva esperando:"
+Leer minutosEspera
+
+Si edad < 18 Entonces
+
+Escribir "MENOR DE EDAD"
+
+Si tieneUrgencia == 1 Entonces
+prioridad <- "Alta"
+Escribir "Menor con urgencia -> Alta"
+SiNo
+Si minutosEspera >= 15 Entonces
+prioridad <- "Alta"
+Escribir "Menor sin urgencia, espera >=15 -> Alta"
+SiNo
+prioridad <- "Media"
+Escribir "Menor sin urgencia, espera <15 -> Media"
+FinSi
+FinSi
+
+SiNo
+
+Si edad > 60 Entonces
+
+Escribir "ADULTO MAYOR"
+
+Si tieneUrgencia == 1 Entonces
+prioridad <- "Alta"
+Escribir "Adulto mayor con urgencia -> Alta"
+SiNo
+Si minutosEspera >= 30 Entonces
+prioridad <- "Alta"
+Escribir "Adulto mayor sin urgencia, espera >=30 -> Alta"
+SiNo
+prioridad <- "Media"
+Escribir "Adulto mayor sin urgencia, espera <30 -> Media"
+FinSi
+FinSi
+
+SiNo
+
+Escribir "Camino: ADULTO (18 a 60)"
+
+Si tieneUrgencia == 1 Entonces
+prioridad <- "Alta"
+Escribir "Adulto con urgencia -> Alta"
+SiNo
+Si minutosEspera >= 60 Entonces
+prioridad <- "Media"
+Escribir "Adulto sin urgencia, espera >=60 -> Media"
+SiNo
+prioridad <- "Baja"
+Escribir "Adulto sin urgencia, espera <60 -> Baja"
+FinSi
+FinSi
+
+FinSi
+
+FinSi
+
+Escribir "PRIORIDAD ASIGNADA: ", prioridad
+
+FinAlgoritmo
+
+#Reto 3
+Algoritmo RetoAdivino
+Definir limiteInferior, limiteSuperior, intento, numeroPreguntado Como Entero
+Definir respuesta Como Cadena
+Definir adivinado Como Logico
+
+limiteInferior <- 1
+limiteSuperior <- 100
+intento <- 0
+adivinado <- Falso
+
+Escribir "division a la mitad, rango de 0 a 100"
+
+Mientras adivinado = Falso Y intento < 7 Hacer
+
+intento <- intento + 1
+
+// mitad rango actual
+numeroPreguntado <- (limiteInferior + limiteSuperior) / 2
+
+Escribir ""
+Escribir "Intento ", intento, ": Es ", numeroPreguntado, "?"
+Escribir "Rango actual: [", limiteInferior, " - ", limiteSuperior, "]"
+
+Escribir "Respuesta (mayor/menor/correcto):"
+Leer respuesta
+
+Si respuesta = "correcto" Entonces
+
+adivinado <- Verdadero
+Escribir "ACERTADO en el intento ", intento
+
+SiNo
+
+Si respuesta = "mayor" Entonces
+
+limiteInferior <- numeroPreguntado + 1
+Escribir "El numero es mayor -> nuevo rango: [", limiteInferior, " - ", limiteSuperior, "]"
+
+SiNo
+Si respuesta = "menor" Entonces
+limiteSuperior <- numeroPreguntado - 1
+Escribir "El numero es menor -> nuevo rango: [", limiteInferior, " - ", limiteSuperior, "]"
+SiNo
+Escribir "Respuesta no valida, escriba: mayor, menor o correcto"
+intento <- intento - 1  // no cuenta como intento valido
+FinSi
+FinSi
+
+FinSi
+
+FinMientras
+
+Si adivinado = Verdadero Entonces
+
+Escribir "numero adivinado en ", intento, " intento(s)"
+SiNo
+Escribir "Se agotaron los 7 intentos"
+FinSi
+
+FinAlgoritmo
