@@ -1,6 +1,6 @@
-#Tareas Algoritmos
+# Tareas Algoritmos
 
-carpetas:  
+## carpetas:  
 
 °Tarea 1 -> Retos en pseudocodigo y diagrama de flujo  
 
