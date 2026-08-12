@@ -1,0 +1,5 @@
+Salida no existe porque n=8 y solo hay 7 valores y se hace un bucle infinito (Bug) porque no existe posicion despues de las 6 entonces lo toma como 0 y sigue entrando
+en las condiciones aunque se rompe cuando el valor logra salir de la misma
+Edad mayor = 31567
+Edad menor = 10
+Promedio = 3961
