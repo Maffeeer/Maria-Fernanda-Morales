@@ -1,0 +1,47 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    int cantidadProductos;
+    double totalCompra = 0;
+
+    cout << "Cuantos productos va a comprar? ";
+    cin >> cantidadProductos;
+
+    for (int i = 1; i <= cantidadProductos; i++) {
+        string nombre;
+        double precioUnitario;
+        int cantidad;
+
+        cout << "\nProducto " << i << endl;
+        cout << "Nombre: ";
+        cin >> nombre;
+        cout << "Precio unitario: ";
+        cin >> precioUnitario;
+        cout << "Cantidad comprada: ";
+        cin >> cantidad;
+
+        double subtotal = precioUnitario * cantidad;
+        totalCompra += subtotal;
+
+        cout << "Subtotal de " << nombre << ": " << subtotal << endl;
+    }
+
+    double descuento = 0;
+
+    if (totalCompra > 300000) {
+        descuento = 0.10;
+    } else if (totalCompra >= 150000 && totalCompra <= 300000) {
+        descuento = 0.05;
+    }
+
+    double valorDescuento = totalCompra * descuento;
+    double totalPagar = totalCompra - valorDescuento;
+
+    cout << "\nTotal antes del descuento: " << totalCompra << endl;
+    cout << "Descuento aplicado: " << (descuento * 100) << "% (" << valorDescuento << ")" << endl;
+    cout << "Total a pagar: " << totalPagar << endl;
+
+    return 0;
+}

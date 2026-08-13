@@ -1,0 +1,27 @@
+cantidad_productos = int(input("Cuantos productos va a comprar? "))
+total_compra = 0
+
+for i in range(1, cantidad_productos + 1):
+    print(f"\nProducto {i}")
+    nombre = input("Nombre: ")
+    precio_unitario = float(input("Precio unitario: "))
+    cantidad = int(input("Cantidad comprada: "))
+
+    subtotal = precio_unitario * cantidad
+    total_compra += subtotal
+
+    print(f"Subtotal de {nombre}: {subtotal}")
+
+if total_compra > 300000:
+    descuento = 0.10
+elif 150000 <= total_compra <= 300000:
+    descuento = 0.05
+else:
+    descuento = 0
+
+valor_descuento = total_compra * descuento
+total_pagar = total_compra - valor_descuento
+
+print("\nTotal antes del descuento:", total_compra)
+print(f"Descuento aplicado: {descuento * 100}% ({valor_descuento})")
+print("Total a pagar:", total_pagar)

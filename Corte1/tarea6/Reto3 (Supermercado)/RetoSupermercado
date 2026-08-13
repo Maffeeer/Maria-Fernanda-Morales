@@ -1,0 +1,45 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+int main() {
+    srand(time(0));
+    double compra;
+
+    cout << "Ingrese el valor de su compra: ";
+    cin >> compra;
+
+    if (compra <= 50000) {
+        cout << "Tu compra no aplica para el descuento (debe ser mayor a 50.000)." << endl;
+        return 0;
+    }
+
+    int bolita = rand() % 4;
+    double descuento = 0;
+    string color;
+
+    if (bolita == 0) {
+        color = "roja";
+        descuento = 0.10;
+    } else if (bolita == 1) {
+        color = "azul";
+        descuento = 0.30;
+    } else if (bolita == 2) {
+        color = "amarilla";
+        descuento = 0.50;
+    } else {
+        color = "blanca";
+        descuento = 1.0;
+    }
+
+    double valorDescontado = compra * descuento;
+    double totalPagar = compra - valorDescontado;
+
+    cout << "Sacaste la bolita " << color << endl;
+    cout << "Descuento obtenido: " << (descuento * 100) << "%" << endl;
+    cout << "Valor descontado: " << valorDescontado << endl;
+    cout << "Total a pagar: " << totalPagar << endl;
+
+    return 0;
+}

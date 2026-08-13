@@ -1,0 +1,32 @@
+    #include <iostream>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+int main() {
+    srand(time(0));
+
+    int dado1 = rand() % 6 + 1;
+    int dado2 = rand() % 6 + 1;
+    int total = dado1 + dado2;
+
+    cout << "Dado 1: " << dado1 << endl;
+    cout << "Dado 2: " << dado2 << endl;
+    cout << "Total: " << total << endl;
+
+    bool gana = false;
+
+    if (dado1 == 1 && dado2 == 1) {
+        gana = true;
+    } else if (total == 3 || total == 11 || total == 2 || total == 12 || total == 7) {
+        gana = true;
+    }
+
+    if (gana) {
+        cout << "Ganaste" << endl;
+    } else {
+        cout << "Perdiste." << endl;
+    }
+
+    return 0;
+}

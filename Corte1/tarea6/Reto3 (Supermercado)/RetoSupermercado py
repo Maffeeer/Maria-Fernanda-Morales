@@ -1,0 +1,29 @@
+import random
+
+compra = float(input("Ingrese el valor de su compra: "))
+
+if compra <= 50000:
+    print("Tu compra no aplica para el descuento (debe ser mayor a 50.000).")
+else:
+    bolita = random.randint(0, 3)
+
+    if bolita == 0:
+        color = "roja"
+        descuento = 0.10
+    elif bolita == 1:
+        color = "azul"
+        descuento = 0.30
+    elif bolita == 2:
+        color = "amarilla"
+        descuento = 0.50
+    else:
+        color = "blanca"
+        descuento = 1.0
+
+    valor_descontado = compra * descuento
+    total_pagar = compra - valor_descontado
+
+    print("Sacaste la bolita", color)
+    print("Descuento obtenido:", descuento * 100, "%")
+    print("Valor descontado:", valor_descontado)
+    print("Total a pagar:", total_pagar)

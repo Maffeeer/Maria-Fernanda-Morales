@@ -1,0 +1,38 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+int main() {
+    int numAleatorio;
+    char eleccion, resultado, respuesta;
+
+    srand(time(0));
+
+    do {
+        cout << "Elija Cara (C) o Sello (S): ";
+        cin >> eleccion;
+
+        numAleatorio = rand() % 2; // genera 0 o 1
+
+        if (numAleatorio == 0) {
+            resultado = 'C';
+        } else {
+            resultado = 'S';
+        }
+
+        cout << "La moneda cayó en: " << resultado << endl;
+
+        if (eleccion == resultado) {
+            cout << "Ganaste." << endl;
+        } else {
+            cout << "Perdiste." << endl;
+        }
+
+        cout << "¿Desea jugar otra ronda? (S/N): ";
+        cin >> respuesta;
+
+    } while (respuesta == 'S' || respuesta == 's');
+
+    return 0;
+}

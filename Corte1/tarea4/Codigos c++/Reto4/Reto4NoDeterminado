@@ -1,0 +1,35 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+int main() {
+    int jugador, maquina;
+    char respuesta;
+
+    srand(time(0));
+
+    do {
+        cout << "Elija: 1=Piedra, 2=Papel, 3=Tijera: ";
+        cin >> jugador;
+
+        maquina = rand() % 3 + 1; // genera un número entre 1 y 3
+        cout << "La máquina eligió: " << maquina << endl;
+
+        if (jugador == maquina) {
+            cout << "Empate" << endl;
+        } else if ((jugador == 1 && maquina == 3) ||
+                   (jugador == 2 && maquina == 1) ||
+                   (jugador == 3 && maquina == 2)) {
+            cout << "Ganaste." << endl;
+        } else {
+            cout << "Perdiste." << endl;
+        }
+
+        cout << "¿Desea jugar otra ronda? (S/N): ";
+        cin >> respuesta;
+
+    } while (respuesta == 'S' || respuesta == 's');
+
+    return 0;
+}

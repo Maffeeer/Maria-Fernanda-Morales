@@ -1,0 +1,20 @@
+import random
+
+respuesta = "S"
+
+while respuesta == "S" or respuesta == "s":
+    jugador = int(input("Elija: 1=Piedra, 2=Papel, 3=Tijera: "))
+
+    maquina = random.randint(1, 3)  # genera un número entre 1 y 3
+    print("La máquina eligió:", maquina)
+
+    if jugador == maquina:
+        print("Empate")
+    elif (jugador == 1 and maquina == 3) or \
+         (jugador == 2 and maquina == 1) or \
+         (jugador == 3 and maquina == 2):
+        print("¡Ganaste!")
+    else:
+        print("Perdiste.")
+
+    respuesta = input("¿Desea jugar otra ronda? (S/N): ")

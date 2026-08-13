@@ -1,0 +1,19 @@
+import random
+
+n = int(input("¿Cuántas rondas desea jugar? "))
+
+for contador in range(1, n + 1):
+    jugador = int(input(f"Ronda {contador} - Elija: 1=Piedra, 2=Papel, 3=Tijera: "))
+
+    maquina = random.randint(1, 3)  # genera un número entre 1 y 3
+    print("La máquina eligió:", maquina)
+
+    if jugador == maquina:
+        print("Empate")
+    elif (jugador == 1 and maquina == 3) or \
+         (jugador == 2 and maquina == 1) or \
+         (jugador == 3 and maquina == 2):
+        print("¡Ganaste!")
+    else:
+        print("Perdiste.")
+        

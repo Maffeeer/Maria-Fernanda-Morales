@@ -1,0 +1,22 @@
+import random
+
+respuesta = 1
+
+while respuesta == 1:
+    eleccion = input("Elija Cara (C) o Sello (S): ").upper()
+
+    numAleatorio = random.randint(0, 1)  # genera 0 o 1
+
+    if numAleatorio == 0:
+        resultado = "C"
+    else:
+        resultado = "S"
+
+    print("La moneda cayó en:", resultado)
+
+    if eleccion == resultado:
+        print("Ganaste.")
+    else:
+        print("Perdiste.")
+
+    respuesta = input("¿Desea jugar otra ronda? (Si = 1/No = 0): ")

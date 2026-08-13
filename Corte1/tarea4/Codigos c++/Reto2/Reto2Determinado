@@ -1,0 +1,24 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int numBebes;
+    float pesoBebe, mesesBebe, dosisVacuna;
+
+    cout << "¿Cuántos bebés desea calcular? ";
+    cin >> numBebes;
+
+    for (int contador = 1; contador <= numBebes; contador++) {
+        cout << "Ingrese el peso del bebé (kg): ";
+        cin >> pesoBebe;
+
+        cout << "Ingrese la edad del bebé (meses): ";
+        cin >> mesesBebe;
+
+        dosisVacuna = ((pesoBebe + 10) / (mesesBebe * 10)) * 8;
+
+        cout << "La dosis de la vacuna es: " << dosisVacuna << endl;
+    }
+
+    return 0;
+}

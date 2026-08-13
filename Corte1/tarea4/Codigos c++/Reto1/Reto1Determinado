@@ -1,0 +1,21 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int numConversiones;
+    float fahrenheit, celsius;
+
+    cout << "¿Cuántas conversiones desea realizar? ";
+    cin >> numConversiones;
+
+    for (int contador = 1; contador <= numConversiones; contador++) {
+        cout << "Ingrese la temperatura en Fahrenheit: ";
+        cin >> fahrenheit;
+
+        celsius = (fahrenheit - 32) / 1.8;
+
+        cout << "La temperatura en Celsius es: " << celsius << endl;
+    }
+
+    return 0;
+}

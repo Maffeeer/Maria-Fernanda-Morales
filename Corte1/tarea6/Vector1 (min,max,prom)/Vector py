@@ -1,0 +1,21 @@
+numeros = [23, 45, 12, 67, 34, 89, 5, 56]
+
+maximo = numeros[0]
+minimo = numeros[0]
+suma = 0
+
+for n in numeros:
+    suma += n
+
+    if n > maximo:
+        maximo = n
+
+    if n < minimo:
+        minimo = n
+
+promedio = suma / len(numeros)
+
+print("Vector:", numeros)
+print("Maximo:", maximo)
+print("Minimo:", minimo)
+print("Promedio:", promedio)
