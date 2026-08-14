@@ -1,0 +1,111 @@
+#include <iostream>
+using namespace std;
+
+
+int dias[] = {0,1,1,0,1,1,1,0,1};
+int n = 9;
+int rachaActual = 0;
+int mejorRacha = 0;
+
+int main() {
+
+    for (int i = 0; i < n; i++) {
+        if (dias[i] == 1) {
+            rachaActual++;
+            if (rachaActual > mejorRacha) {
+                mejorRacha = rachaActual;
+            }
+        } else {
+            rachaActual = 0;
+        }
+    }
+
+    cout << "La racha mas larga de lluvia fue de " << mejorRacha << " dias." << endl << endl;
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+e "capturar datos" de "procesar datos".

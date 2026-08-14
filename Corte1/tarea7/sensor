@@ -1,0 +1,46 @@
+#include <iostream>
+using namespace std;
+
+void reto1() {
+    int n;
+    int suma = 0;
+    int validos = 0;
+    int descartadas = 0;
+    int i = 0;
+
+    cout << "Cuantas lecturas va a ingresar? ";
+    cin >> n;
+
+    int lecturas[n];
+
+    cout << "Ingrese las " << n << " lecturas del sensor (-999 si fallo):" << endl;
+    while (i < n) {
+        cout << "Lectura " << (i + 1) << ": ";
+        cin >> lecturas[i];
+        i++;
+    }
+
+    i = 0;
+    while (i < n) {
+        if (lecturas[i] != -999) {
+            suma += lecturas[i];
+            validos++;
+        } else {
+            descartadas++;
+        }
+        i++;
+    }
+
+    if (validos > 0) {
+        double promedio = (double)suma / validos;
+        cout << "Promedio real: " << promedio << endl;
+    } else {
+        cout << "No hay lecturas validas." << endl;
+    }
+    cout << "Lecturas descartadas: " << descartadas << endl;
+}
+
+int main() {
+    reto1();
+    return 0;
+}
