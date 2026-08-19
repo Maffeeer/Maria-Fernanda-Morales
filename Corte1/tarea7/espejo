@@ -1,0 +1,28 @@
+#include <iostream>
+using namespace std;
+
+int codigo[] = {3, 5, 7, 5, 3};
+int n = 5;
+int inicio = 0;
+int fin = n - 1;
+bool esPalindromo = true;
+
+
+int main() {
+
+    while (inicio < fin) {
+        if (codigo[inicio] != codigo[fin]) {
+            esPalindromo = false;
+            break;
+        }
+        inicio++;
+        fin--;
+    }
+
+    if (esPalindromo) {
+        cout << "El codigo es un palindromo valido." << endl;
+    } else {
+        cout << "El codigo NO es un palindromo." << endl;
+    }
+    return 0;
+}

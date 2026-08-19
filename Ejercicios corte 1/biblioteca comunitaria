@@ -1,0 +1,113 @@
+
+#include <iostream>
+#include <iomanip>  // Para setw() - establecer ancho de columnas
+#include <string>   // Para usar string
+using namespace std;
+
+const int RECURSOS = 3;
+const int DIAS = 5;
+
+
+int main() {
+    
+    // Matriz para almacenar el uso de recursos (filas = recursos, columnas = días)
+    int matrizUso[RECURSOS][DIAS];
+    int cantidadDisponible[RECURSOS];
+    
+    // Array con los nombres de los tres recursos
+    string recursos[RECURSOS] = {"Computador", "Videobén", "Sala"};
+    
+    cout << "===== BIBLIOTECA COMUNITARIA =====" << endl;
+    cout << "Sistema de Registro de Uso de Recursos" << endl << endl;
+    
+    // Pedir la cantidad de recursos disponibles
+    cout << "--- RECURSOS DISPONIBLES EN LA BIBLIOTECA ---" << endl;
+    for (int i = 0; i < RECURSOS; i++) {
+        cout << "Cantidad de " << recursos[i] << "s disponibles: ";
+        cin >> cantidadDisponible[i];
+    }
+    cout << endl;
+    
+    // Pedir datos al usuario para cada recurso y cada día
+    for (int i = 0; i < RECURSOS; i++) {
+        cout << "--- " << recursos[i] << " ---" << endl;
+        for (int j = 0; j < DIAS; j++) {
+            cout << "Ingrese el uso del " << recursos[i] << " en el día " << (j + 1) << "  (veces): ";
+            cin >> matrizUso[i][j];
+        }
+        cout << endl;
+    }
+    
+    cout << "\n===== MATRIZ DE USO =====" << endl;
+    cout << left << setw(15) << "Recurso" << setw(8) << "Día1" << setw(8) << "Día2" 
+         << setw(8) << "Día3" << setw(8) << "Día4" << setw(8) << "Día5" << setw(8) << "TOTAL" << endl;
+    cout << "----------------------------------------------------" << endl;
+    
+    // Arrays para almacenar totales
+    int totalPorRecurso[RECURSOS];
+    int totalPorDia[DIAS] = {0, 0, 0, 0, 0};
+    
+    // Mostrar matriz y calcular totales por recurso
+    for (int i = 0; i < RECURSOS; i++) {
+        cout << left << setw(15) << recursos[i];
+        totalPorRecurso[i] = 0;
+        
+        for (int j = 0; j < DIAS; j++) {
+            cout << left << setw(8) << matrizUso[i][j];
+            totalPorRecurso[i] += matrizUso[i][j];
+            totalPorDia[j] += matrizUso[i][j];
+        }
+        cout << left << setw(8) << totalPorRecurso[i] << endl;
+    }
+    
+    // Mostrar totales por día
+    cout << left << setw(15) << "TOTAL DÍA";
+    int granTotal = 0;
+    for (int j = 0; j < DIAS; j++) {
+        cout << left << setw(8) << totalPorDia[j];
+        granTotal += totalPorDia[j];
+    }
+    cout << left << setw(8) << granTotal << endl;
+    
+    // Mostrar resultados finales
+    cout << "\n===== ANÁLISIS FINAL =====" << endl;
+    cout << left << setw(15) << "Recurso" << setw(20) << "Total Uso" << setw(20) << "Disponibles" 
+         << setw(15) << "Día Mayor Uso" << endl;
+    cout << "----------------------------------------------------" << endl;
+    
+    for (int i = 0; i < RECURSOS; i++) {
+        // Encontrar el día con mayor uso para este recurso
+        int diaMaximoRecurso = 0;
+        for (int j = 1; j < DIAS; j++) {
+            if (matrizUso[i][j] > matrizUso[i][diaMaximoRecurso]) {
+                diaMaximoRecurso = j;
+            }
+        }
+        cout << left << setw(15) << recursos[i] << setw(20) << totalPorRecurso[i] 
+             << setw(20) << cantidadDisponible[i] << setw(15) << ("Día " + to_string(diaMaximoRecurso + 1)) << endl;
+    }
+    
+    // Encontrar el recurso con mayor flujo
+    int recursoMayorFlujo = 0;
+    for (int i = 1; i < RECURSOS; i++) {
+        if (totalPorRecurso[i] > totalPorRecurso[recursoMayorFlujo]) {
+            recursoMayorFlujo = i;
+        }
+    }
+    
+    // Encontrar el día con mayor uso general
+    int diaMaximoGeneral = 0;
+    for (int j = 1; j < DIAS; j++) {
+        if (totalPorDia[j] > totalPorDia[diaMaximoGeneral]) {
+            diaMaximoGeneral = j;
+        }
+    }
+    
+    cout << "\n===== RESUMEN =====" << endl;
+    cout << "Recurso con MAYOR FLUJO GENERAL: " << recursos[recursoMayorFlujo] 
+         << " con " << totalPorRecurso[recursoMayorFlujo] << " unidades de uso" << endl;
+    cout << "Día con MAYOR FLUJO GENERAL: Día " << (diaMaximoGeneral + 1) 
+         << " con " << totalPorDia[diaMaximoGeneral] << " unidades de uso total" << endl;
+    
+    return 0;
+}
