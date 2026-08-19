@@ -1,0 +1,28 @@
+def rotar90Grados(matriz):
+    filas = len(matriz)
+    columnas = len(matriz[0])
+
+    resultado = []
+
+    # La matriz resultante tiene columnas filas
+    for j in range(columnas):
+        filaNueva = []
+
+        for i in range(filas - 1, -1, -1):
+            filaNueva.append(matriz[i][j])
+
+        resultado.append(filaNueva)
+
+    return resultado
+
+
+matrizOriginal = [
+    [1, 2, 3],
+    [4, 5, 6]
+]
+
+matrizRotada = rotar90Grados(matrizOriginal)
+
+print("La matriz fue rotada 90 grados:")
+for fila in matrizRotada:
+    print(fila)
