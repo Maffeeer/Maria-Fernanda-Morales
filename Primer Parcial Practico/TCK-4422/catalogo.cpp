@@ -20,10 +20,8 @@ public:
     bool estaPrestado() const { return prestado; }
 
     virtual string descripcion() const { return "Recurso generico " + codigo; }
-    // Cambio: agregado 'virtual' para que las clases derivadas puedan sobrescribir
-    // Este es el mecanismo de polimorfismo que permite que cada objeto responda con su propia descripción
 
-// Implemente Nueva clase LibroFisico, que hera de recurso, aparte se sobreescribe el metodo descripcion() para que devuelva "Libro <codigo> de <autor>"
+// Implemente Nueva clase LibroFisico, que hera de recurso, aparte se cambia el metodo descripcion() para que devuelva "Libro <codigo> de <autor>"
 class LibroFisico : public Recurso {
 private:
     string autor;
@@ -35,7 +33,7 @@ public:
     }
 };
 
-// Implementamos nueva clase equipo, que hereda de recurso, aparte se sobreescribe el metodo descripcion() para que devuelva "Equipo <codigo> (<horasUso>h)"
+// Implementamos nueva clase equipo, que hereda de recurso, aparte se cambia  el metodo descripcion() para que devuelva "Equipo <codigo> (<horasUso>h)"
 class Equipo : public Recurso {
 private:
     int horasUso;
@@ -43,7 +41,7 @@ public:
     Equipo(string c, int h) : Recurso(c), horasUso(h) {}
     
     string descripcion() const override { 
-        return "Equipo " + codigo + " (" + to_string(horasUso) + "h)"; 
+        return "Equipo " + codigo + " (" + to_string(horasUso) + "h)"; // para convertir int a string usamos to_string (Aprendido del laboratorio)
     }
 };
 
@@ -51,11 +49,10 @@ int main() {
     const int N = 3;
     Recurso* catalogo[N] = { nullptr, nullptr, nullptr };
     catalogo[0] = new Recurso("RG-001");
-    // Cree una nueva instancia de LibroFisico y de Equipo, y las agrege al catalogo
+    //Cree el LibroFisico y de Equipo, y las agrege al catalogo
     catalogo[1] = new LibroFisico("LF-002", "Borges");
     catalogo[2] = new Equipo("EQ-003", 12);
 
-    // Se agrego el marcar al menos un recurso como prestado
     catalogo[1]->prestar();  // Marcar el libro como prestado
 
     int prestados = 0;
@@ -66,6 +63,6 @@ int main() {
         cout << endl;
     }
 
-    for (int i = 0; i < N; i++) delete catalogo[i];   // delete sobre nullptr es seguro
+    for (int i = 0; i < N; i++) delete catalogo[i];   // agg el destructor delete
     return 0;
 }
