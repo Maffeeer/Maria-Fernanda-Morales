@@ -1,0 +1,38 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Usuario {
+
+    private:
+    string nombre;
+    int documento;
+    bool sanciones;  
+
+    public:
+    // Constructor
+    Usuario(string nom, int doc, bool sanc) : nombre(nom), documento(doc), sanciones(sanc) {}
+
+class Recursos {
+    private:
+    int codigo;
+    string categoria;
+    bool disponibilidad;
+
+    public:
+    // Constructor
+    Recursos(string nom, int cant) : nombre(nom), cantidadDisponible(cant) {}
+};
+
+class Prestamo {
+    private:
+    string fecha;
+
+    public:
+    // Constructor
+    Prestamo(int cod, string fecha) : codigoPrestamo(cod), fechaPrestamo(fecha) {}
+};
+
+int main() {
+    return 0;
+}
