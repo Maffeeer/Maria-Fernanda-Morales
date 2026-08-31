@@ -1,0 +1,145 @@
+"""
+ CENTRAL DE RECICLAJE COMUNITARIA - Laboratorio 1 (Python)
+ Parte A -> Arreglos y matrices
+ Parte B -> Memoria dinamica (equivalente en Python)
+ Parte C -> Objetos (clases, herencia)
+"""
+
+
+# PARTE A 
+
+def parte_a():
+
+    PUNTOS = 4
+    DIAS = 6
+
+    # Matriz de pesos (kg): filas = puntos de acopio, columnas = dias
+    pesos = [
+        [12, 0, 15, 8, 20, 5],
+        [10, 9, 0, 7, 6, 11],
+        [0, 0, 0, 4, 3, 2],
+        [18, 14, 16, 0, 12, 9]
+    ]
+
+    total_por_punto = [0] * PUNTOS
+    total_por_dia = [0] * DIAS
+    total_general = 0
+    registros_cero = 0
+
+    # Recorrido de la matriz: acumular totales
+    for i in range(PUNTOS):
+        for j in range(DIAS):
+            valor = pesos[i][j]
+            total_por_punto[i] += valor
+            total_por_dia[j] += valor
+            total_general += valor
+            if valor == 0:
+                registros_cero += 1
+
+    # Punto mas productivo
+    indice_punto_max = 0
+    for i in range(1, PUNTOS):
+        if total_por_punto[i] > total_por_punto[indice_punto_max]:
+            indice_punto_max = i
+
+    # Dia de menor recoleccion (sumando los 4 puntos ese dia)
+    indice_dia_min = 0
+    for j in range(1, DIAS):
+        if total_por_dia[j] < total_por_dia[indice_dia_min]:
+            indice_dia_min = j
+
+    # ----- Informe -----
+    print("=== Total por punto de acopio ===")
+    for i in range(PUNTOS):
+        print(f"Punto {i + 1}: {total_por_punto[i]} kg")
+
+    print("\n=== Total por dia ===")
+    for j in range(DIAS):
+        print(f"Dia {j + 1}: {total_por_dia[j]} kg")
+
+    print(f"\nPunto mas productivo: Punto {indice_punto_max + 1} "
+          f"con {total_por_punto[indice_punto_max]} kg")
+
+    print(f"Dia de menor recoleccion en toda la central: Dia {indice_dia_min + 1} "
+          f"con {total_por_dia[indice_dia_min]} kg")
+
+    print(f"Total general recolectado: {total_general} kg")
+
+    print(f"Registros en 0 (dias sin operar): {registros_cero}")
+
+
+# PARTE B 
+def parte_b():
+
+    n = int(input("¿Cuantos puntos de acopio nuevos se van a registrar? "))
+
+    if n <= 0:
+        print("Cantidad invalida.")
+        return
+
+    pesos = []
+    for i in range(n):
+        peso = int(input(f"Peso (kg) del punto {i + 1}: "))
+        pesos.append(peso)
+
+    suma = sum(pesos)
+    promedio = suma / n
+
+    print(f"\nSuma total de la jornada especial: {suma} kg")
+    print(f"Promedio por punto: {promedio:.2f} kg")
+
+
+# PARTE C
+
+class PuntoAcopio:
+    def __init__(self, codigo, barrio):
+        self.__codigo = codigo
+        self.__barrio = barrio
+        self.__total_recogido = 0.0
+
+    def registrar_recoleccion(self, kilos):
+        if kilos > 0:
+            self.__total_recogido += kilos
+
+    def supera_meta(self, meta):
+        return self.__total_recogido >= meta
+
+    def get_total_recogido(self):
+        return self.__total_recogido
+
+    def descripcion(self):
+        return (f"Punto {self.__codigo} ({self.__barrio}): "
+                f"{self.__total_recogido} kg recogidos")
+
+
+class MaterialEspecial(PuntoAcopio):
+    def __init__(self, codigo, barrio, tipo_material):
+        super().__init__(codigo, barrio)
+        self.__tipo_material = tipo_material
+
+    def descripcion(self):
+        return (f"Punto especial ({self.__tipo_material}) -> "
+                f"{self.get_total_recogido()} kg")
+
+
+def parte_c():
+
+    p1 = PuntoAcopio("P01", "El Prado")
+    p1.registrar_recoleccion(15.5)
+    p1.registrar_recoleccion(9.0)
+    print(p1.descripcion())
+    print("¿Supera meta de 20kg?", "Si" if p1.supera_meta(20) else "No")
+
+    m1 = MaterialEspecial("P02", "Los Alamos", "electronicos")
+    m1.registrar_recoleccion(30.0)
+    print("\n" + m1.descripcion())
+    print("¿Supera meta de 25kg?", "Si" if m1.supera_meta(25) else "No")
+
+def main():
+    parte_a()
+    parte_b()
+    parte_c()
+
+
+if __name__ == "__main__":
+    main()

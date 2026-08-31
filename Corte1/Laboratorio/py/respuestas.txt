@@ -1,0 +1,6 @@
+En lugar de reservar memoria con new y liberarla con delete, Python
+crea la lista dinamicamente y un recolector de basura (garbage
+collector) basado en conteo de referencias se encarga de liberar
+la memoria cuando ya nadie usa el objeto. El programador no pide
+ni libera memoria manualmente: cuando la variable sale de alcance
+o deja de tener referencias, el interprete la destruye solo.

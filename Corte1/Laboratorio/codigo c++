@@ -1,0 +1,188 @@
+// CENTRAL DE RECICLAJE COMUNITARIA - Laboratorio 1 (C++)
+// Parte A -> Arreglos y matrices
+// Parte B -> Memoria dinamica y punteros
+//Parte C -> Objetos (clases, herencia)
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+ // PARTE A
+
+void parteA() {
+
+    const int PUNTOS = 4;
+    const int DIAS = 6;
+
+    // Matriz de pesos (kg) recogidos: filas = puntos de acopio, columnas = dias
+    int pesos[PUNTOS][DIAS] = {
+        {12, 0, 15, 8, 20, 5},
+        {10, 9, 0, 7, 6, 11},
+        {0, 0, 0, 4, 3, 2},
+        {18, 14, 16, 0, 12, 9}
+    };
+
+    int totalPorPunto[PUNTOS] = {0};
+    int totalPorDia[DIAS] = {0};
+    int totalGeneral = 0;
+    int registrosCero = 0;
+
+    // Recorrido de la matriz: acumular totales
+    for (int i = 0; i < PUNTOS; i++) {
+        for (int j = 0; j < DIAS; j++) {
+            totalPorPunto[i] += pesos[i][j];
+            totalPorDia[j] += pesos[i][j];
+            totalGeneral += pesos[i][j];
+            if (pesos[i][j] == 0) {
+                registrosCero++;
+            }
+        }
+    }
+
+    // Punto mas productivo
+    int indicePuntoMax = 0;
+    for (int i = 1; i < PUNTOS; i++) {
+        if (totalPorPunto[i] > totalPorPunto[indicePuntoMax]) {
+            indicePuntoMax = i;
+        }
+    }
+
+    // Dia de menor recoleccion (sumando los 4 puntos ese dia)
+    int indiceDiaMin = 0;
+    for (int j = 1; j < DIAS; j++) {
+        if (totalPorDia[j] < totalPorDia[indiceDiaMin]) {
+            indiceDiaMin = j;
+        }
+    }
+
+    // ----- Informe -----
+    cout << "=== Total por punto de acopio ===" << endl;
+    for (int i = 0; i < PUNTOS; i++) {
+        cout << "Punto " << (i + 1) << ": " << totalPorPunto[i] << " kg" << endl;
+    }
+
+    cout << "\n=== Total por dia ===" << endl;
+    for (int j = 0; j < DIAS; j++) {
+        cout << "Dia " << (j + 1) << ": " << totalPorDia[j] << " kg" << endl;
+    }
+
+    cout << "\nPunto mas productivo: Punto " << (indicePuntoMax + 1)
+         << " con " << totalPorPunto[indicePuntoMax] << " kg" << endl;
+
+    cout << "Dia de menor recoleccion en toda la central: Dia " << (indiceDiaMin + 1)
+         << " con " << totalPorDia[indiceDiaMin] << " kg" << endl;
+
+    cout << "Total general recolectado: " << totalGeneral << " kg" << endl;
+
+    cout << "Registros en 0 (dias sin operar): " << registrosCero << endl;
+}
+
+ // PARTE B
+
+void parteB() {
+
+    int n;
+    cout << "¿Cuantos puntos de acopio nuevos se van a registrar? ";
+    cin >> n;
+
+    if (n <= 0) {
+        cout << "Cantidad invalida." << endl;
+        return;
+    }
+
+    // Reserva dinamica del arreglo
+    int* pesos = new int[n];
+
+    // Llenado del arreglo (jornada especial)
+    for (int i = 0; i < n; i++) {
+        cout << "Peso (kg) del punto " << (i + 1) << ": ";
+        cin >> pesos[i];
+    }
+
+    // Recorrido con aritmetica de punteros (sin usar indices []).
+    int suma = 0;
+    int* fin = pesos + n; // puntero "uno-pasado-el-final"
+    for (int* p = pesos; p != fin; p++) {
+        suma += *p;
+    }
+    double promedio = static_cast<double>(suma) / n;
+
+    cout << "\nSuma total de la jornada especial: " << suma << " kg" << endl;
+    cout << "Promedio por punto: " << promedio << " kg" << endl;
+
+    // Liberacion de memoria
+    delete[] pesos;
+    pesos = nullptr;
+}
+
+ // PARTE C
+
+class PuntoAcopio {
+protected:
+    string codigo;
+    string barrio;
+    double totalRecogido;
+
+public:
+    PuntoAcopio(string cod, string b)
+        : codigo(cod), barrio(b), totalRecogido(0.0) {}
+
+    void registrarRecoleccion(double kilos) {
+        if (kilos > 0) {
+            totalRecogido += kilos;
+        }
+    }
+
+    bool superaMeta(double meta) const {
+        return totalRecogido >= meta;
+    }
+
+    double getTotalRecogido() const {
+        return totalRecogido;
+    }
+
+    virtual string descripcion() const {
+        return "Punto " + codigo + " (" + barrio + "): "
+               + to_string(totalRecogido) + " kg recogidos";
+    }
+
+    virtual ~PuntoAcopio() {}
+};
+
+class MaterialEspecial : public PuntoAcopio {
+private:
+    string tipoMaterial; // atributo propio (ej: "electronicos", "aceites")
+
+public:
+    MaterialEspecial(string cod, string b, string tipo)
+        : PuntoAcopio(cod, b), tipoMaterial(tipo) {}
+
+    string descripcion() const override {
+        return "Punto especial " + codigo + " (" + barrio + ") - Material: "
+               + tipoMaterial + " -> " + to_string(totalRecogido) + " kg";
+    }
+};
+
+void parteC() {
+    cout << "\n#####################################################\n";
+    cout << "# PARTE C - Objetos\n";
+    cout << "#####################################################\n\n";
+
+    PuntoAcopio p1("P01", "El Prado");
+    p1.registrarRecoleccion(15.5);
+    p1.registrarRecoleccion(9.0);
+    cout << p1.descripcion() << endl;
+    cout << "¿Supera meta de 20kg? " << (p1.superaMeta(20) ? "Si" : "No") << endl;
+
+    MaterialEspecial m1("P02", "Los Alamos", "electronicos");
+    m1.registrarRecoleccion(30.0);
+    cout << "\n" << m1.descripcion() << endl;
+    cout << "¿Supera meta de 25kg? " << (m1.superaMeta(25) ? "Si" : "No") << endl;
+}
+
+int main() {
+    parteA();
+    parteB();
+    parteC();
+    return 0;
+}

@@ -1,0 +1,27 @@
+¿Qué imprime?
+Escriban su predicción en papel antes de que lo ejecutemos. Uno por uno.
+
+Fragmento 1 — C++
+int v[4] = {5, 3, 9, 1};
+int* p = v;
+cout << *(p + 2);
+
+imprime 9
+
+Fragmento 2 — Python
+m = [[0] * 2] * 2
+m[0][0] = 7
+print(m)
+
+imprime error esta mal ejecutado, no tiene bucle for asi que imprimira (7.0). (7,0) y deberia imprimir (7,7),(7,7)
+
+Fragmento 3 — Python
+def f(lista):
+    lista = lista + [4]
+
+datos = [1, 2, 3]
+f(datos)
+print(datos)
+
+imprime la lista datos 
+imprime 1,2,3
