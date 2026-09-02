@@ -36,16 +36,22 @@ class Fila:
            BUG P0: revise los tres casos."""
         if self.cabeza is None:
             return False
+
+        # Caso 1
         if self.cabeza.turno == turno:
-            self.cabeza = None                 # <-- caso 1
+            self.cabeza = self.cabeza.siguiente # El none hacia que se vaciara la fila al retirar el primero
             return True
+
+        # Caso 2
         anterior = self.cabeza
         while anterior.siguiente is not None:
             if anterior.siguiente.turno == turno:
-                anterior.siguiente = anterior.siguiente   # <-- caso 2
+                anterior.siguiente = anterior.siguiente.siguiente # se apunta a si mismo asi que en realidad no servua de nada
                 return True
             anterior = anterior.siguiente
-        return False
+
+        # Caso 3
+        return False #No se modifica nada, solo se devuelve False si no se encontro el turno
 
     def cuantos(self):
         """Devuelve cuantas personas hay en la fila."""

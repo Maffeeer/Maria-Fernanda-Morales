@@ -11,37 +11,43 @@ using namespace std;
 class Recurso {
 protected:
     string codigo;
-    bool   prestado;
+    bool prestado;
+
 public:
     Recurso(string c) : codigo(c), prestado(false) {}
-    ~Recurso() {}
+    virtual ~Recurso() = default;
 
-    void prestar()  { prestado = true; }
+    void prestar() { prestado = true; }
     bool estaPrestado() const { return prestado; }
 
-    virtual string descripcion() const { return "Recurso generico " + codigo; }
+    virtual string descripcion() const {
+        return "Recurso generico " + codigo;
+    }
+};
 
 // Implemente Nueva clase LibroFisico, que hera de recurso, aparte se cambia el metodo descripcion() para que devuelva "Libro <codigo> de <autor>"
 class LibroFisico : public Recurso {
 private:
     string autor;
+
 public:
     LibroFisico(string c, string a) : Recurso(c), autor(a) {}
-    
-    string descripcion() const override { 
-        return "Libro " + codigo + " de " + autor; 
+
+    string descripcion() const override {
+        return "Libro " + codigo + " de " + autor;
     }
 };
 
-// Implementamos nueva clase equipo, que hereda de recurso, aparte se cambia  el metodo descripcion() para que devuelva "Equipo <codigo> (<horasUso>h)"
+// Implementamos nueva clase equipo, que hereda de recurso, aparte se cambia el metodo descripcion() para que devuelva "Equipo <codigo> (<horasUso>h)"
 class Equipo : public Recurso {
 private:
     int horasUso;
+
 public:
     Equipo(string c, int h) : Recurso(c), horasUso(h) {}
-    
-    string descripcion() const override { 
-        return "Equipo " + codigo + " (" + to_string(horasUso) + "h)"; // para convertir int a string usamos to_string (Aprendido del laboratorio)
+
+    string descripcion() const override {
+        return "Equipo " + codigo + " (" + to_string(horasUso) + "h)";
     }
 };
 
@@ -59,10 +65,13 @@ int main() {
     for (int i = 0; i < N; i++) {
         if (catalogo[i] == nullptr) continue;
         cout << catalogo[i]->descripcion();
-        if (catalogo[i]->estaPrestado()) { cout << "  [PRESTADO]"; prestados++; }
+        if (catalogo[i]->estaPrestado()) {
+            cout << "  [PRESTADO]";
+            prestados++;
+        }
         cout << endl;
     }
 
-    for (int i = 0; i < N; i++) delete catalogo[i];   // agg el destructor delete
+    for (int i = 0; i < N; i++) delete catalogo[i];
     return 0;
 }
