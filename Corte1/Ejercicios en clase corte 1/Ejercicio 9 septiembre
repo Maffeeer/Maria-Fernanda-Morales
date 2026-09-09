@@ -1,0 +1,77 @@
+from typing import Sequence
+
+# secuencial
+
+def busqueda_secuencial(a: Sequence[int], x: int) -> tuple[int, int]:
+    """Devuelve (índice, cantidad_de_comparaciones). Índice -1 si no está."""
+    intentos = 0
+    for i in range(len(a)):
+        intentos += 1
+        if a[i] == x:
+            return i, intentos
+    return -1, intentos
+
+# Version pythónica equivalente
+def busqueda_secuencial_pythonica(a, x) -> tuple[int, int]:
+    intentos = 0
+    for i, v in enumerate(a):
+        intentos += 1
+        if v == x:
+            return i, intentos
+    return -1, intentos
+
+# Recursiva
+def secuencial_rec(a, x, i=0, intentos=0) -> tuple[int, int]:
+    intentos += 1
+    if i >= len(a):
+        return -1, intentos
+    if a[i] == x:
+        return i, intentos
+    return secuencial_rec(a, x, i + 1, intentos)
+
+
+# Binaria
+
+def binaria(v, x) -> tuple[int, int]:
+    """Devuelve (índice, cantidad_de_comparaciones). Índice -1 si no está."""
+    izq, der = 0, len(v) - 1
+    intentos = 0
+    while izq <= der:
+        intentos += 1
+        medio = (izq + der) // 2
+        if v[medio] == x:
+            return medio, intentos
+        elif v[medio] < x:
+            izq = medio + 1   # descarto la mitad izquierda
+        else:
+            der = medio - 1   # descarto la mitad derecha
+    return -1, intentos
+
+
+# Main
+
+def main():
+    lista = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19]  # debe estar ordenada para la binaria
+    x = 1
+
+    print("Lista:", lista)
+    print("Buscando el valor:", x)
+
+    idx, n = busqueda_secuencial(lista, x)
+    resultado = idx if idx != -1 else "numero no encontrado"
+    print(f"busqueda_secuencial, índice: {resultado}, busquedas: {n}")
+
+    idx, n = busqueda_secuencial_pythonica(lista, x)
+    resultado = idx if idx != -1 else "numero no encontrado"
+    print(f"busqueda_secuencial_pythonica, índice: {resultado}, busquedas: {n}")
+
+    idx, n = secuencial_rec(lista, x)
+    resultado = idx if idx != -1 else "numero no encontrado"
+    print(f"secuencial_rec, índice: {resultado}, busquedas: {n}")
+
+    idx, n = binaria(lista, x)
+    resultado = idx if idx != -1 else "numero no encontrado"
+    print(f"binaria, índice: {resultado}, busquedas {n}")
+
+if __name__ == "__main__":
+    main()
