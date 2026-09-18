@@ -1,0 +1,278 @@
+import time
+from typing import List, Optional
+
+
+# Suma recursiva de una lista
+
+def sumaLista(lista: List[int], i: int = 0) -> int:
+    if i >= len(lista):
+        return 0
+
+    return lista[i] + sumaLista(lista, i + 1)
+
+
+def sumaLista_v2(lista: List[int]) -> int:
+    """Versión que divide la lista en head y tail."""
+    if len(lista) == 0:
+        return 0
+
+    return lista[0] + sumaLista_v2(lista[1:])
+
+
+# Potencia recursiva: simple vs optimizada
+
+def potencia_simple(a: int, b: int, llamadas: int = 0) -> tuple[int, int]:
+    llamadas += 1
+
+    if b == 0:
+        return 1, llamadas
+
+    resultado, llamadas = potencia_simple(a, b - 1, llamadas)
+    return a * resultado, llamadas
+
+
+def potencia_optimizada(a: int, b: int, llamadas: int = 0) -> tuple[int, int]:
+    llamadas += 1
+
+    if b == 0:
+        return 1, llamadas
+
+    if b % 2 == 0:
+        resultado, llamadas = potencia_optimizada(a, b // 2, llamadas)
+        return resultado * resultado, llamadas
+
+    else:
+        resultado, llamadas = potencia_optimizada(a, b - 1, llamadas)
+        return a * resultado, llamadas
+
+
+# Invertir cadena recursiva
+
+def invertir_cadena(s: str) -> str:
+    if len(s) <= 1:
+        return s
+
+    return invertir_cadena(s[1:]) + s[0]
+
+
+def invertir_cadena_v2(s: str, i: int = None) -> str:
+    """Versión usando índice en lugar de slicing."""
+    if i is None:
+        i = len(s) - 1
+
+    if i < 0:
+        return ""
+
+    return s[i] + invertir_cadena_v2(s, i - 1)
+
+
+# Lista enlazada
+
+class Nodo:
+    """Nodo de una lista enlazada."""
+    def __init__(self, valor, siguiente=None):
+        self.valor = valor
+        self.siguiente = siguiente
+
+    def __repr__(self):
+        return f"Nodo({self.valor})"
+
+
+class ListaEnlazada:
+    """Lista enlazada simple."""
+    def __init__(self):
+        self.cabeza = None
+
+    def agregar(self, valor):
+        """Agrega un valor al inicio."""
+        self.cabeza = Nodo(valor, self.cabeza)
+
+    def agregar_al_final(self, valor):
+        """Agrega un valor al final."""
+        if not self.cabeza:
+            self.cabeza = Nodo(valor)
+        else:
+            self._agregar_al_final_rec(self.cabeza, valor)
+
+    def _agregar_al_final_rec(self, nodo, valor):
+        """Recursivo: recorre hasta el final."""
+        if nodo.siguiente is None:
+            nodo.siguiente = Nodo(valor)
+        else:
+            self._agregar_al_final_rec(nodo.siguiente, valor)
+
+    def imprimir_normal(self, nodo="__INIT__"):
+        if nodo == "__INIT__":
+            nodo = self.cabeza
+
+        if nodo is None:
+            return
+
+        print(f"{nodo.valor}", end=" → ")
+
+        self.imprimir_normal(nodo.siguiente)
+
+    def imprimir_inverso(self, nodo="__INIT__"):
+        if nodo == "__INIT__":
+            nodo = self.cabeza
+
+        if nodo is None:
+            return
+
+        self.imprimir_inverso(nodo.siguiente)
+
+        print(f"{nodo.valor}", end=" → ")
+
+    def recorrido_completo(self):
+        print("\n Lista", end="")
+        nodo = self.cabeza
+        while nodo:
+            print(f"{nodo.valor}", end=" → ")
+            nodo = nodo.siguiente
+        print("None")
+
+        print("\n orden normal:", end=" ")
+        self.imprimir_normal()
+        print("None")
+
+        print("\n orden inverso:", end=" ")
+        self.imprimir_inverso()
+        print("None")
+
+
+# Pruebas
+
+def prueba_uno():
+    print("Suma de lista recursiva")
+
+    listas_prueba = [
+        [1, 2, 3, 4, 5],
+        [10, 20, 30],
+        [100],
+        [],
+        [5, -3, 2, -1, 4],
+    ]
+
+    for lista in listas_prueba:
+        resultado = sumaLista(lista)
+        resultado_v2 = sumaLista_v2(lista)
+        suma_python = sum(lista)
+
+        print(f"Lista: {lista}")
+        print(f"  sumaLista():    {resultado}")
+        print(f"  sumaLista_v2(): {resultado_v2}")
+        print(f"  sum() Python:   {suma_python}")
+        print(f"  Correctos: {resultado == suma_python}")
+        print()
+
+
+def prueba_dos():
+    print("Potencia recursiva: simple vs optimizada")
+
+    casos = [
+        (2, 10),
+        (3, 8),
+        (2, 20),
+        (5, 6),
+        (2, 30),
+    ]
+
+    print(f"{'a':<5} {'b':<5} {'Resultado':<15} {'Simple':<15} {'Optimizada':<18} {'Mejora':<10}")
+    print("-" * 75)
+
+    for a, b in casos:
+        tiempo_ini_s = time.perf_counter()
+        resultado_s, llamadas_s = potencia_simple(a, b)
+        tiempo_s = time.perf_counter() - tiempo_ini_s
+
+        tiempo_ini_o = time.perf_counter()
+        resultado_o, llamadas_o = potencia_optimizada(a, b)
+        tiempo_o = time.perf_counter() - tiempo_ini_o
+
+        correcto = resultado_s == resultado_o == a**b
+        factor = llamadas_s / llamadas_o if llamadas_o > 0 else 1
+
+        print(f"{a:<5} {b:<5} {a}^{b}={resultado_s:<10} {llamadas_s:>6} llamadas  {llamadas_o:>6} llamadas  {factor:>7.1f}x")
+
+    print("Analisis")
+    print(f"  Simple:      O(b) llamadas")
+    print(f"  Optimizada:  O(log b) llamadas")
+    print(f"  Ejemplo: 2^30")
+    print(f"  Simple:     30 llamadas")
+    print(f"  Optimizada: {30*0.6:.0f} llamadas (log₂ 30 ≈ 5)")
+    print()
+
+
+def prueba_tres():
+    print("Invertir cadena recursiva")
+
+    cadenas = [
+        "Hola",
+        "Recursión",
+        "Python",
+        "A",
+        "",
+        "12345",
+        "racecar",
+    ]
+
+    print(f"{'Original':<20} {'Invertida (v1)':<20} {'Invertida (v2)':<20} {'Python reverse':<20}")
+
+    for cadena in cadenas:
+        invertida_v1 = invertir_cadena(cadena)
+        invertida_v2 = invertir_cadena_v2(cadena)
+        invertida_py = cadena[::-1]
+
+        print(f"{cadena:<20} {invertida_v1:<20} {invertida_v2:<20} {invertida_py:<20}")
+
+    print()
+
+
+def prueba_cuatro():
+    print("Lista enlazada")
+
+    lista = ListaEnlazada()
+    for valor in [5, 4, 3, 2, 1]:
+        lista.agregar(valor)
+
+    lista.recorrido_completo()
+
+    print("\n" + "-"*70)
+    print("Segunda lista: A → B → C → D")
+    print("-"*70)
+
+    lista2 = ListaEnlazada()
+    for letra in ['D', 'C', 'B', 'A']:
+        lista2.agregar(letra)
+
+    lista2.recorrido_completo()
+
+
+
+def mostrar_pila_factorial():
+    print("\n Ejecución \n")
+
+    nivel = [0]
+
+    def factorial_con_traza(n):
+        print("|  " * nivel[0] + f"factorial({n}) entra")
+        nivel[0] += 1
+
+        r = 1 if n <= 1 else n * factorial_con_traza(n - 1)
+
+        nivel[0] -= 1
+        print("|  " * nivel[0] + f"factorial({n}) devuelve {r}")
+        return r
+
+    resultado = factorial_con_traza(4)
+    print(f"\n Resultado: {resultado}")
+
+
+if __name__ == "__main__":
+    prueba_uno()
+    prueba_dos()
+    prueba_tres()
+    prueba_cuatro()
+    mostrar_pila_factorial()
+
+    print("CONCLUSIONES")

@@ -1,0 +1,300 @@
+import time
+from typing import List, Tuple, Set
+
+# Parte A
+
+def encontrar_camino_a(mapa: List[List[int]], inicio: Tuple[int, int],
+                       fin: Tuple[int, int]) -> Tuple[bool, List[Tuple[int, int]], int]:
+
+    filas = len(mapa)
+    columnas = len(mapa[0])
+    visitadas = [[False] * columnas for _ in range(filas)]
+    camino = []
+    caminos_encontrados = [0]  # Contador de caminos
+
+    def backtrack(pos: Tuple[int, int]) -> bool:
+        fila, col = pos
+
+        # Caso base: llegamos al destino
+        if pos == fin:
+            caminos_encontrados[0] += 1
+            return True
+
+        # Marca como visitada
+        visitadas[fila][col] = True
+        camino.append(pos)
+
+        # Explora 4 direcciones
+        direcciones = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
+        for df, dc in direcciones:
+            nueva_fila = fila + df
+            nueva_col = col + dc
+
+            # Verifica límites y validez
+            if (0 <= nueva_fila < filas and
+                0 <= nueva_col < columnas and
+                mapa[nueva_fila][nueva_col] != 1 and
+                not visitadas[nueva_fila][nueva_col]):
+
+                if backtrack((nueva_fila, nueva_col)):
+                    return True  # Encontró camino, retorna
+
+        # Backtrack: desmarcar y deshacer
+        visitadas[fila][col] = False
+        camino.pop()
+        return False
+
+    # Inicia búsqueda
+    encontrado = backtrack(inicio)
+    return encontrado, camino, caminos_encontrados[0]
+
+
+# Parte B
+
+def contar_acopios(mapa: List[List[int]]) -> int:
+    """Cuenta cuántos puntos de acopio (2) hay en el mapa."""
+    return sum(row.count(2) for row in mapa)
+
+
+def encontrar_camino_b(mapa: List[List[int]], inicio: Tuple[int, int],
+                       fin: Tuple[int, int]) -> Tuple[bool, List[Tuple[int, int]], List[Tuple[int, int]]]:
+
+    filas = len(mapa)
+    columnas = len(mapa[0])
+    visitadas = [[False] * columnas for _ in range(filas)]
+    camino = []
+    acopios_recogidos = []
+    total_acopios = contar_acopios(mapa)
+
+    def backtrack(pos: Tuple[int, int], recogidos: int) -> bool:
+        fila, col = pos
+
+        # Recolecta si hay acopio aquí
+        if mapa[fila][col] == 2 and pos not in acopios_recogidos:
+            acopios_recogidos.append(pos)
+            recogidos += 1
+
+        # Caso base: llegamos a fin con todos los acopios
+        if pos == fin and recogidos == total_acopios:
+            return True
+
+        # Si ya pasamos el fin sin recoger todos, falla
+        if pos == fin:
+            return False
+
+        # Marca como visitada
+        visitadas[fila][col] = True
+        camino.append(pos)
+
+        # Explora 4 direcciones
+        direcciones = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
+        for df, dc in direcciones:
+            nueva_fila = fila + df
+            nueva_col = col + dc
+
+            if (0 <= nueva_fila < filas and
+                0 <= nueva_col < columnas and
+                mapa[nueva_fila][nueva_col] != 1 and
+                not visitadas[nueva_fila][nueva_col]):
+
+                if backtrack((nueva_fila, nueva_col), recogidos):
+                    return True
+
+        # Backtrack
+        visitadas[fila][col] = False
+        if camino and camino[-1] == pos:
+            camino.pop()
+
+        return False
+
+    encontrado = backtrack(inicio, 0)
+    return encontrado, camino, acopios_recogidos
+
+
+# Utilidades
+
+def imprimir_mapa_con_camino(mapa: List[List[int]], camino: List[Tuple[int, int]],
+                            titulo: str = ""):
+
+    """Imprime el mapa con el camino marcado."""
+    if titulo:
+        print(f"\n {titulo}")
+
+    filas = len(mapa)
+    columnas = len(mapa[0])
+
+    # Crea copia para no modificar original
+    visualizacion = [row[:] for row in mapa]
+
+    # Marca el camino (3 = camino recorrido)
+    for fila, col in camino:
+        if visualizacion[fila][col] != 2:  # No sobrescribe acopios
+            visualizacion[fila][col] = 3
+
+    # Marca inicio y fin
+    visualizacion[camino[0][0]][camino[0][1]] = 4  # S = salida
+    visualizacion[camino[-1][0]][camino[-1][1]] = 5  # E = entrada
+
+    # Imprime
+    leyenda = {0: ".", 1: "#", 2: "2", 3: "·", 4: "S", 5: "E"}
+
+    for fila in visualizacion:
+        print(" ".join(leyenda.get(celda, "?") for celda in fila))
+
+
+# Pruebas
+
+def prueba_parte_a():
+    """Prueba A: Camino básico"""
+    print("Camino sin recolección)")
+
+    # Mapa 5x5
+    mapa_5x5 = [
+        [0, 0, 1, 0, 0],
+        [1, 0, 1, 0, 1],
+        [0, 0, 0, 0, 0],
+        [0, 1, 1, 1, 0],
+        [0, 0, 0, 0, 0]
+    ]
+
+    inicio = (0, 0)
+    fin = (4, 4)
+
+    print(f"\n Mapa 5x5 (0=transitable, 1=bloqueado):")
+    for fila in mapa_5x5:
+        print(" ".join(str(c) for c in fila))
+
+    tiempo_ini = time.perf_counter()
+    encontrado, camino, cantidad_caminos = encontrar_camino_a(mapa_5x5, inicio, fin)
+    tiempo = time.perf_counter() - tiempo_ini
+
+    print(f"\n Camino encontrado: {encontrado}")
+    print(f" Cantidad de caminos distintos: {cantidad_caminos}")
+    print(f" Largo del camino: {len(camino)} pasos")
+    print(f" Tiempo: {tiempo*1000:.2f} ms")
+
+    if encontrado:
+        imprimir_mapa_con_camino(mapa_5x5, camino, "\nMapa con camino (S=inicio, E=fin, ·=camino):")
+
+    return cantidad_caminos
+
+
+def prueba_parte_b():
+    """Prueba B: Recolección obligatoria"""
+    print("Recolección con puntos de acopio)")
+
+    # Mapa 5x5 con acopios (2)
+    mapa_5x5_acopios = [
+        [0, 0, 1, 0, 2],
+        [1, 0, 1, 0, 1],
+        [0, 2, 0, 0, 0],
+        [0, 1, 1, 1, 0],
+        [0, 0, 0, 0, 2]
+    ]
+
+    inicio = (0, 0)
+    fin = (4, 4)
+
+    print(f"\n Mapa 5x5 con acopios (2=punto de acopio):")
+    for fila in mapa_5x5_acopios:
+        print(" ".join(str(c) for c in fila))
+
+    total_acopios = contar_acopios(mapa_5x5_acopios)
+    print(f"\n Total de puntos de acopio: {total_acopios}")
+
+    tiempo_ini = time.perf_counter()
+    encontrado, camino, acopios = encontrar_camino_b(mapa_5x5_acopios, inicio, fin)
+    tiempo = time.perf_counter() - tiempo_ini
+
+    print(f"\n Camino encontrado: {encontrado}")
+    if encontrado:
+        print(f" Acopios recogidos: {acopios}")
+        print(f" Largo del camino: {len(camino)} pasos")
+        print(f" Tiempo: {tiempo*1000:.2f} ms")
+        imprimir_mapa_con_camino(mapa_5x5_acopios, camino, "\nMapa con camino (2=acopio recolectado):")
+    else:
+        print(" No se encontró camino que pase por todos los acopios")
+
+
+def prueba_parte_c():
+    """Prueba C: Análisis de crecimiento"""
+    print("Analisis de crecimiento de tiempo")
+
+    # Mapas de diferentes tamaños (sin acopios para PARTE A)
+    mapas = {}
+
+    # Mapa 3x3
+    mapas[3] = [
+        [0, 0, 1],
+        [0, 0, 0],
+        [1, 0, 0]
+    ]
+
+    # Mapa 5x5
+    mapas[5] = [
+        [0, 0, 1, 0, 0],
+        [1, 0, 1, 0, 1],
+        [0, 0, 0, 0, 0],
+        [0, 1, 1, 1, 0],
+        [0, 0, 0, 0, 0]
+    ]
+
+    # Mapa 7x7
+    mapas[7] = [
+        [0, 0, 1, 0, 0, 0, 0],
+        [1, 0, 1, 0, 1, 0, 1],
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 1, 1, 1, 0, 1, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [1, 0, 1, 0, 1, 0, 1],
+        [0, 0, 0, 0, 0, 0, 0]
+    ]
+
+    # Mapa 10x10
+    mapas[10] = [
+        [0, 0, 1, 0, 0, 0, 0, 1, 0, 0],
+        [1, 0, 1, 0, 1, 0, 1, 1, 0, 1],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 1, 1, 1, 0, 1, 0, 1, 1, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 1, 1, 1, 0, 1, 0, 1, 1, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
+    ]
+
+    print(f"\n{'Tamaño':<10} {'Caminos':<12} {'Tiempo (ms)':<15} {'Crecimiento':<12}")
+
+    tiempos = {}
+    caminos = {}
+
+    for tamaño in sorted(mapas.keys()):
+        mapa = mapas[tamaño]
+        inicio = (0, 0)
+        fin = (tamaño - 1, tamaño - 1)
+
+        tiempo_ini = time.perf_counter()
+        encontrado, camino, cantidad = encontrar_camino_a(mapa, inicio, fin)
+        tiempo = (time.perf_counter() - tiempo_ini) * 1000
+
+        tiempos[tamaño] = tiempo
+        caminos[tamaño] = cantidad
+
+        if tamaño == 3:
+            factor = "-"
+        else:
+            prev_tamaño = sorted([t for t in tiempos.keys() if t < tamaño])[-1]
+            factor = f"{tiempo / tiempos[prev_tamaño]:.1f}x"
+
+        print(f"{tamaño}x{tamaño:<6} {cantidad:<12} {tiempo:<15.2f} {factor:<12}")
+
+    print("Conclusión:")
+    print("El tiempo de ejecución crece exponencialmente porque se explora un árbol de decisiones, no una iteración lineal. De 5x5 a 10x10 el tiempo se multiplica por cientos o miles. Los ciclos anidados no pueden resolver esto porque necesitas recursión para deshacer decisiones cuando llegas a callejones sin salida—los ciclos solo iteran secuencialmente sobre posiciones, no exploran árboles de búsqueda con vuelta atrás.")
+
+if __name__ == "__main__":
+    cantidad_a = prueba_parte_a()
+    prueba_parte_b()
+    prueba_parte_c()

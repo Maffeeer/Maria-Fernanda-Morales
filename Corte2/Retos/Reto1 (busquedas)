@@ -1,0 +1,219 @@
+from typing import Sequence, Tuple
+import time
+
+
+# Busqueda binaria recursiva
+
+def binaria_recursiva(v: Sequence[int], x: int, izq: int = None, der: int = None) -> int:
+
+    if izq is None:
+        izq = 0
+    if der is None:
+        der = len(v) - 1
+
+    if izq > der:
+        return -1
+
+    medio = (izq + der) // 2
+
+    if v[medio] == x:
+        return medio
+    elif v[medio] < x:
+        return binaria_recursiva(v, x, medio + 1, der)
+    else:
+        return binaria_recursiva(v, x, izq, medio - 1)
+
+
+# Binaria con posición de inserción
+
+def binaria_con_insercion(v: Sequence[int], x: int, izq: int = None, der: int = None) -> Tuple[int, bool]:
+
+    if izq is None:
+        izq = 0
+    if der is None:
+        der = len(v) - 1
+
+    if izq > der:
+        return izq, False
+
+    medio = (izq + der) // 2
+
+    if v[medio] == x:
+        return medio, True
+    elif v[medio] < x:
+        return binaria_con_insercion(v, x, medio + 1, der)
+    else:
+        return binaria_con_insercion(v, x, izq, medio - 1)
+
+
+# Binaria con primer elemento repetido
+
+def binaria_primer_repetido(v: Sequence[int], x: int, izq: int = None, der: int = None) -> int:
+
+    if izq is None:
+        izq = 0
+    if der is None:
+        der = len(v) - 1
+
+    if izq > der:
+        return -1
+
+    medio = (izq + der) // 2
+
+    if v[medio] == x:
+        resultado_izq = binaria_primer_repetido(v, x, izq, medio - 1)
+
+        if resultado_izq != -1:
+            return resultado_izq
+        else:
+            return medio
+
+    elif v[medio] < x:
+        return binaria_primer_repetido(v, x, medio + 1, der)
+    else:
+        return binaria_primer_repetido(v, x, izq, medio - 1)
+
+
+#   Búsqueda secuencial vs recursiva
+
+def secuencial(v: Sequence[int], x: int) -> int:
+    """Búsqueda secuencial simple."""
+    for i in range(len(v)):
+        if v[i] == x:
+            return i
+    return -1
+
+
+def secuencial_recursiva(v: Sequence[int], x: int, i: int = 0) -> int:
+    """Búsqueda secuencial recursiva."""
+    if i >= len(v):
+        return -1
+    if v[i] == x:
+        return i
+    return secuencial_recursiva(v, x, i + 1)
+
+
+# Pruebas
+
+def prueba_uno():
+    print("Busqueda binaria recursiva")
+
+    v = [10, 20, 30, 40, 50, 60, 70, 80, 90]
+
+    casos = [30, 50, 90, 5, 95, 10, 999]
+
+    for x in casos:
+        resultado = binaria_recursiva(v, x)
+        if resultado != -1:
+            print(f"{x} encontrado en índice {resultado} (valor: {v[resultado]})")
+        else:
+            print(f"{x} no encontrado")
+
+
+def prueba_dos():
+    print("Busqueda binaria con posición de inserción")
+
+    v = [10, 20, 30, 40, 50, 60, 70, 80, 90]
+
+    casos = [30, 35, 5, 95, 50, 25]
+
+    print(f"\nLista original: {v}\n")
+
+    for x in casos:
+        indice, encontrado = binaria_con_insercion(v, x)
+        if encontrado:
+            print(f"{x:2d} encontrado en índice {indice}")
+        else:
+            print(f"{x:2d} no encontrado, debería insertarse en índice {indice}")
+            if indice < len(v):
+                print(f"       (entre {v[indice-1] if indice > 0 else 'inicio'} y {v[indice]})")
+            elif indice == len(v):
+                print(f"       (al final, después de {v[indice-1]})")
+
+
+def prueba_tres():
+    print("Busqueda binaria con primer elemento repetido")
+
+    v = [10, 20, 20, 20, 30, 40, 40, 50, 60, 60, 60, 60, 70]
+
+    casos = [20, 40, 60, 30, 10, 70, 99]
+
+    print(f"\nLista con repetidos: {v}\n")
+
+    for x in casos:
+        indice = binaria_primer_repetido(v, x)
+        if indice != -1:
+            contador = 0
+            for i in range(indice, len(v)):
+                if v[i] == x:
+                    contador += 1
+                else:
+                    break
+
+            print(f"{x:2d} encontrado en índice {indice} (hay {contador} repetidos desde aquí)")
+            print(f"       Valores: {[v[j] for j in range(indice, min(indice+contador, len(v)))]}")
+        else:
+            print(f"{x:2d} no encontrado")
+
+
+def comparacion_velocidad(tamaño_lista: int = 10000):
+    print("Comparacion de velocidad")
+
+    lista = list(range(0, tamaño_lista, 1))
+
+    casos_prueba = [
+        ("Primer elemento", 0),
+        ("Elemento medio", tamaño_lista // 2),
+        ("Último elemento", tamaño_lista - 1),
+        ("No existe (pequeño)", -5),
+        ("No existe (grande)", tamaño_lista + 100),
+    ]
+
+    print(f"\nTamaño de lista: {tamaño_lista} elementos")
+    print(f"Rango: [0 a {tamaño_lista-1}]\n")
+
+    resultados = []
+
+    for descripcion, valor in casos_prueba:
+        print(f"\n Buscando: {descripcion} (valor={valor})")
+
+        inicio_sec = time.perf_counter()
+        res_sec = secuencial(lista, valor)
+        tiempo_sec = time.perf_counter() - inicio_sec
+
+        inicio_bin = time.perf_counter()
+        res_bin = binaria_recursiva(lista, valor)
+        tiempo_bin = time.perf_counter() - inicio_bin
+
+        factor = tiempo_sec / tiempo_bin if tiempo_bin > 0 else float('inf')
+
+        print(f"Secuencial:  {tiempo_sec*1000000:.2f} μs → índice {res_sec}")
+        print(f"Binaria:     {tiempo_bin*1000000:.2f} μs → índice {res_bin}")
+        print(f"Binaria es {factor:.1f}x más rápida")
+
+        resultados.append({
+            'caso': descripcion,
+            'valor': valor,
+            'tiempo_sec': tiempo_sec,
+            'tiempo_bin': tiempo_bin,
+            'factor': factor
+        })
+
+    print("Tabla comparativa")
+
+    print(f"\n{'Caso':<25} {'Valor':<8} {'Secuencial (μs)':<18} {'Binaria (μs)':<18} {'Factor':<10}")
+
+    for r in resultados:
+        print(f"{r['caso']:<25} {r['valor']:<8} {r['tiempo_sec']*1000000:>15.2f}  {r['tiempo_bin']*1000000:>15.2f}  {r['factor']:>8.1f}x")
+
+    promedio_factor = sum(r['factor'] for r in resultados) / len(resultados)
+
+    print(f"Mejora promedio: {promedio_factor:.1f}x\n")
+
+    return resultados
+
+if __name__ == "__main__":
+    prueba_uno()
+    prueba_dos()
+    prueba_tres()
+    comparacion_velocidad(10000)

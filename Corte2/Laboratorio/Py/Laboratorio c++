@@ -1,0 +1,331 @@
+#include <iostream>
+#include <vector>
+#include <chrono>
+using namespace std;
+
+// Parte A
+
+int cantidadCaminos_A;  // Contador global
+
+bool backtrack_A(const vector<vector<int>>& mapa,
+                 vector<vector<bool>>& visitadas,
+                 pair<int, int> pos,
+                 pair<int, int> fin,
+                 vector<pair<int, int>>& camino) {
+
+    int filas = mapa.size();
+    int columnas = mapa[0].size();
+    int fila = pos.first, col = pos.second;
+
+    // Caso base: llegamos al destino
+    if (pos == fin) {
+        cantidadCaminos_A++;
+        return true;
+    }
+
+    // Marca como visitada
+    visitadas[fila][col] = true;
+    camino.push_back(pos);
+
+    // 4 direcciones: arriba, abajo, izquierda, derecha
+    int df[] = {-1, 1, 0, 0};
+    int dc[] = {0, 0, -1, 1};
+
+    for (int i = 0; i < 4; i++) {
+        int nfila = fila + df[i];
+        int ncol = col + dc[i];
+
+        if (nfila >= 0 && nfila < filas && ncol >= 0 && ncol < columnas &&
+            mapa[nfila][ncol] != 1 && !visitadas[nfila][ncol]) {
+
+            if (backtrack_A(mapa, visitadas, {nfila, ncol}, fin, camino)) {
+                return true;
+            }
+        }
+    }
+
+    // Backtrack
+    visitadas[fila][col] = false;
+    camino.pop_back();
+    return false;
+}
+
+pair<bool, vector<pair<int, int>>> encontrar_camino_a(
+    const vector<vector<int>>& mapa,
+    pair<int, int> inicio,
+    pair<int, int> fin) {
+
+    int filas = mapa.size();
+    int columnas = mapa[0].size();
+    vector<vector<bool>> visitadas(filas, vector<bool>(columnas, false));
+    vector<pair<int, int>> camino;
+    cantidadCaminos_A = 0;
+
+    backtrack_A(mapa, visitadas, inicio, fin, camino);
+    return {!camino.empty(), camino};
+}
+
+// Parte B
+
+int totalAcopios;
+vector<pair<int, int>> acopiosRecogidos;
+
+int contarAcopios(const vector<vector<int>>& mapa) {
+    int count = 0;
+    for (const auto& fila : mapa) {
+        for (int celda : fila) {
+            if (celda == 2) count++;
+        }
+    }
+    return count;
+}
+
+bool backtrack_B(const vector<vector<int>>& mapa,
+                 vector<vector<bool>>& visitadas,
+                 pair<int, int> pos,
+                 pair<int, int> fin,
+                 int recogidos,
+                 vector<pair<int, int>>& camino) {
+
+    int filas = mapa.size();
+    int columnas = mapa[0].size();
+    int fila = pos.first, col = pos.second;
+
+    // Recolecta si hay acopio
+    if (mapa[fila][col] == 2) {
+        bool yaRecogido = false;
+        for (const auto& a : acopiosRecogidos) {
+            if (a == pos) {
+                yaRecogido = true;
+                break;
+            }
+        }
+        if (!yaRecogido) {
+            acopiosRecogidos.push_back(pos);
+            recogidos++;
+        }
+    }
+
+    // Caso base: llegamos a fin CON todos los acopios
+    if (pos == fin && recogidos == totalAcopios) {
+        return true;
+    }
+
+    // Si ya pasamos el fin sin recoger todos, falla
+    if (pos == fin) {
+        return false;
+    }
+
+    // Marca como visitada
+    visitadas[fila][col] = true;
+    camino.push_back(pos);
+
+    // 4 direcciones
+    int df[] = {-1, 1, 0, 0};
+    int dc[] = {0, 0, -1, 1};
+
+    for (int i = 0; i < 4; i++) {
+        int nfila = fila + df[i];
+        int ncol = col + dc[i];
+
+        if (nfila >= 0 && nfila < filas && ncol >= 0 && ncol < columnas &&
+            mapa[nfila][ncol] != 1 && !visitadas[nfila][ncol]) {
+
+            if (backtrack_B(mapa, visitadas, {nfila, ncol}, fin, recogidos, camino)) {
+                return true;
+            }
+        }
+    }
+
+    // Backtrack
+    visitadas[fila][col] = false;
+    camino.pop_back();
+    return false;
+}
+
+pair<bool, vector<pair<int, int>>> encontrar_camino_b(
+    const vector<vector<int>>& mapa,
+    pair<int, int> inicio,
+    pair<int, int> fin) {
+
+    int filas = mapa.size();
+    int columnas = mapa[0].size();
+    vector<vector<bool>> visitadas(filas, vector<bool>(columnas, false));
+    vector<pair<int, int>> camino;
+    acopiosRecogidos.clear();
+    totalAcopios = contarAcopios(mapa);
+
+    backtrack_B(mapa, visitadas, inicio, fin, 0, camino);
+    return {!camino.empty(), camino};
+}
+
+// utilidades
+
+void imprimirMapa(const vector<vector<int>>& mapa) {
+    for (const auto& fila : mapa) {
+        for (int celda : fila) {
+            cout << celda << " ";
+        }
+        cout << "\n";
+    }
+}
+
+void prueba_parte_a() {
+    cout << "A: Camino sin recolección \n";
+
+    // Mapa 5x5
+    vector<vector<int>> mapa_5x5 = {
+        {0, 0, 1, 0, 0},
+        {1, 0, 1, 0, 1},
+        {0, 0, 0, 0, 0},
+        {0, 1, 1, 1, 0},
+        {0, 0, 0, 0, 0}
+    };
+
+    auto inicio = make_pair(0, 0);
+    auto fin = make_pair(4, 4);
+
+    cout << "\nMapa 5x5 (0=transitable, 1=bloqueado):\n";
+    imprimirMapa(mapa_5x5);
+
+    auto t_ini = chrono::high_resolution_clock::now();
+    auto [encontrado, camino] = encontrar_camino_a(mapa_5x5, inicio, fin);
+    auto t_fin = chrono::high_resolution_clock::now();
+
+    double tiempo = chrono::duration<double, milli>(t_fin - t_ini).count();
+
+    cout << "\n Camino encontrado: " << (encontrado ? "SI" : "NO") << "\n";
+    cout << " Cantidad de caminos distintos: " << cantidadCaminos_A << "\n";
+    cout << " Largo del camino: " << camino.size() << " pasos\n";
+    cout << " Tiempo: " << fixed << tiempo << " ms\n";
+}
+
+void prueba_parte_b() {
+    cout << "B: Recolección obligatoria con puntos de acopio \n";
+
+    // Mapa 5x5 con acopios
+    vector<vector<int>> mapa_5x5_acopios = {
+        {0, 0, 1, 0, 2},
+        {1, 0, 1, 0, 1},
+        {0, 2, 0, 0, 0},
+        {0, 1, 1, 1, 0},
+        {0, 0, 0, 0, 2}
+    };
+
+    auto inicio = make_pair(0, 0);
+    auto fin = make_pair(4, 4);
+
+    cout << "\nMapa 5x5 con acopios (2=punto de acopio):\n";
+    imprimirMapa(mapa_5x5_acopios);
+
+    int total = contarAcopios(mapa_5x5_acopios);
+    cout << "\nTotal de puntos de acopio: " << total << "\n";
+
+    auto t_ini = chrono::high_resolution_clock::now();
+    auto [encontrado, camino] = encontrar_camino_b(mapa_5x5_acopios, inicio, fin);
+    auto t_fin = chrono::high_resolution_clock::now();
+
+    double tiempo = chrono::duration<double, milli>(t_fin - t_ini).count();
+
+    cout << "\n Camino encontrado: " << (encontrado ? "SI" : "NO") << "\n";
+    if (encontrado) {
+        cout << " Acopios recogidos: " << acopiosRecogidos.size() << "\n";
+        cout << " Largo del camino: " << camino.size() << " pasos\n";
+        cout << " Tiempo: " << fixed << tiempo << " ms\n";
+    } else {
+        cout << " No se encontró camino que pase por todos los acopios\n";
+    }
+}
+
+void prueba_parte_c() {
+    cout << "C: Análisis del Crecimiento de tiempo\n";
+
+    // Diferentes tamaños de mapas
+    vector<vector<vector<int>>> mapas;
+    vector<int> tamaños;
+
+    // 3x3
+    mapas.push_back({
+        {0, 0, 1},
+        {0, 0, 0},
+        {1, 0, 0}
+    });
+    tamaños.push_back(3);
+
+    // 5x5
+    mapas.push_back({
+        {0, 0, 1, 0, 0},
+        {1, 0, 1, 0, 1},
+        {0, 0, 0, 0, 0},
+        {0, 1, 1, 1, 0},
+        {0, 0, 0, 0, 0}
+    });
+    tamaños.push_back(5);
+
+    // 7x7
+    mapas.push_back({
+        {0, 0, 1, 0, 0, 0, 0},
+        {1, 0, 1, 0, 1, 0, 1},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 1, 1, 1, 0, 1, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {1, 0, 1, 0, 1, 0, 1},
+        {0, 0, 0, 0, 0, 0, 0}
+    });
+    tamaños.push_back(7);
+
+    // 10x10
+    mapas.push_back({
+        {0, 0, 1, 0, 0, 0, 0, 1, 0, 0},
+        {1, 0, 1, 0, 1, 0, 1, 1, 0, 1},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 1, 1, 1, 0, 1, 0, 1, 1, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 1, 1, 1, 0, 1, 0, 1, 1, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 1, 0, 0, 0, 0, 0, 0, 0}
+    });
+    tamaños.push_back(10);
+
+    cout << "\nTamaño     Caminos    Tiempo (ms)    Crecimiento\n";
+
+    vector<double> tiempos;
+    vector<int> caminos_cnt;
+
+    for (size_t i = 0; i < mapas.size(); i++) {
+        int tamaño = tamaños[i];
+        const auto& mapa = mapas[i];
+        auto inicio = make_pair(0, 0);
+        auto fin = make_pair(tamaño - 1, tamaño - 1);
+
+        auto t_ini = chrono::high_resolution_clock::now();
+        encontrar_camino_a(mapa, inicio, fin);
+        auto t_fin = chrono::high_resolution_clock::now();
+
+        double tiempo = chrono::duration<double, milli>(t_fin - t_ini).count();
+        tiempos.push_back(tiempo);
+        caminos_cnt.push_back(cantidadCaminos_A);
+
+        cout << tamaño << "x" << tamaño << "       ";
+        cout << cantidadCaminos_A << "       ";
+        cout << fixed << tiempo << "        ";
+
+        if (i == 0) {
+            cout << "-\n";
+        } else {
+            cout << (tiempo / tiempos[i-1]) << "x\n";
+        }
+    }
+
+    cout << "Conclusión: Backtracking crece exponencialmente: de 5x5 a 10x10 el tiempo se multiplica por cientos o miles porque cada posición agrega más caminos. Los ciclos anidados no funcionan porque el problema es un árbol de decisiones (4^n opciones), no iteración secuencial lineal.\n";
+}
+
+int main() {
+    prueba_parte_a();
+    prueba_parte_b();
+    prueba_parte_c();
+
+    return 0;
+}
