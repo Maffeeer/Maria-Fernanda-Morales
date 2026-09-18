@@ -1,0 +1,75 @@
+# comparo dos vecinos si estan al reves los intercambio y repito el proceso hasta que nadie mas se mueva 
+# bubble sort
+import time
+
+def bubble_sort(arr):
+    n = len(arr)
+    intentos = 0
+    for i in range(n):
+        intentos += 1
+        swapped = False
+        for j in range(0, n - i - 1):
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+                swapped = True
+        if not swapped:
+            break
+    return arr, intentos
+# buscar el más pequeño y ponerlo al principio 
+# selection sort
+
+def selection_sort(arr):
+    n = len(arr)
+    intentos = 0
+    for i in range(n):
+        intentos += 1
+        min_idx = i
+        for j in range(i + 1, n):
+            if arr[j] < arr[min_idx]:
+                min_idx = j
+        arr[i], arr[min_idx] = arr[min_idx], arr[i]
+    return arr, intentos
+# tomo el segubndo y lo inserto donde va respecto al primero
+# insertion sort
+
+def insertion_sort(arr):
+    intentos = 0
+    for i in range(1, len(arr)):
+        intentos += 1
+        key = arr[i]
+        j = i - 1
+        while j >= 0 and arr[j] > key:
+            arr[j + 1] = arr[j]
+            j -= 1
+        arr[j + 1] = key
+    return arr, intentos
+
+# datos: [64, 25, 12, 22, 11, 90, 45, 33]
+
+def main():
+    datos = [64, 25, 12, 22, 11, 90, 45, 33]
+    print("Lista sin ordenar:", datos)
+
+    # Bubble Sort
+    bubble_sorted = bubble_sort(datos.copy())
+    print("Bubble Sort: lista ordenada:", bubble_sorted)
+
+    # Selection Sort
+    selection_sorted = selection_sort(datos.copy())
+    print("Selection Sort: lista ordenada:", selection_sorted)
+
+    # Insertion Sort
+    insertion_sorted = insertion_sort(datos.copy())
+    print("Insertion Sort: lista ordenada:", insertion_sorted)
+
+    #comparación de intentos
+    bubblesort, intentosbubble = bubble_sort(datos.copy())
+    selectionsort, intentosselection = selection_sort(datos.copy())
+    insertionsort, intentosinsertion = insertion_sort(datos.copy())
+
+    print("Bubble sort:", intentosbubble, "intentos")
+    print("Selection sort:", intentosselection, "intentos")
+    print("Insertion sort:", intentosinsertion, "intentos")
+
+if __name__ == "__main__": 
+    main()
