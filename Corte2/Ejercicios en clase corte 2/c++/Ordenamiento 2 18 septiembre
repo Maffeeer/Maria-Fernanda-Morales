@@ -1,0 +1,151 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+// Merge Sort y Quicksort
+// Mergesort es un algoritmo de ordenamiento
+// que utiliza la técnica de divide y
+// vencerás. Divide la lista en
+// sublistas más pequeñas, las ordena y
+// luego las combina para obtener la lista
+// final ordenada.
+
+void merge_sort(vector<int>& arr, int left, int right) {
+    if (right - left > 1) {
+        int mid = left + (right - left) / 2;
+
+        merge_sort(arr, left, mid);
+        merge_sort(arr, mid, right);
+
+        vector<int> left_half(arr.begin() + left, arr.begin() + mid);
+        vector<int> right_half(arr.begin() + mid, arr.begin() + right);
+
+        size_t i = 0, j = 0;
+        int k = left;
+
+        while (i < left_half.size() && j < right_half.size()) {
+            if (left_half[i] < right_half[j]) {
+                arr[k] = left_half[i];
+                i++;
+            } else {
+                arr[k] = right_half[j];
+                j++;
+            }
+            k++;
+        }
+
+        while (i < left_half.size()) {
+            arr[k] = left_half[i];
+            i++;
+            k++;
+        }
+
+        while (j < right_half.size()) {
+            arr[k] = right_half[j];
+            j++;
+            k++;
+        }
+    }
+}
+
+void merge_sort(vector<int>& arr) {
+    merge_sort(arr, 0, arr.size());
+}
+
+// Quicksort es un algoritmo de ordenamiento
+// Elige un pivote y reorganiza el arreglo:
+// los menores al pivote quedan a la izquierda
+// y los mayores a la derecha.
+// Luego repite lo mismo en cada lado.
+
+vector<int> quick_sort(const vector<int>& arr) {
+    if (arr.size() <= 1) {
+        return arr;
+    }
+
+    int pivot = arr[arr.size() / 2];
+
+    vector<int> left, middle, right;
+    for (int x : arr) {
+        if (x < pivot) left.push_back(x);
+        else if (x == pivot) middle.push_back(x);
+        else right.push_back(x);
+    }
+
+    vector<int> sorted_left = quick_sort(left);
+    vector<int> sorted_right = quick_sort(right);
+
+    vector<int> result;
+    result.insert(result.end(), sorted_left.begin(), sorted_left.end());
+    result.insert(result.end(), middle.begin(), middle.end());
+    result.insert(result.end(), sorted_right.begin(), sorted_right.end());
+
+    return result;
+}
+
+// Heapsort y Bucket Sort
+
+void heapify(vector<int>& arr, int n, int i) {
+    int largest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+
+    if (left < n && arr[left] > arr[largest])
+        largest = left;
+
+    if (right < n && arr[right] > arr[largest])
+        largest = right;
+
+    if (largest != i) {
+        swap(arr[i], arr[largest]);
+        heapify(arr, n, largest);
+    }
+}
+
+void heap_sort(vector<int>& arr) {
+    int n = arr.size();
+
+    // Construir el heap (reorganizar el arreglo)
+    for (int i = n / 2 - 1; i >= 0; i--)
+        heapify(arr, n, i);
+
+    // Extraer elementos uno por uno del heap
+    for (int i = n - 1; i > 0; i--) {
+        swap(arr[0], arr[i]);
+        heapify(arr, i, 0);
+    }
+}
+
+// Bucket Sort
+
+vector<int> bucket_sort(const vector<int>& arr) {
+    if (arr.empty()) {
+        return arr;
+    }
+
+    int min_value = *min_element(arr.begin(), arr.end());
+    int max_value = *max_element(arr.begin(), arr.end());
+
+    double bucket_range = static_cast<double>(max_value - min_value) / arr.size();
+    if (bucket_range == 0) bucket_range = 1; // evita división por cero si todos son iguales
+
+    vector<vector<int>> buckets(arr.size());
+
+    for (int num : arr) {
+        int index = static_cast<int>((num - min_value) / bucket_range);
+        if (index == static_cast<int>(arr.size()))
+            index -= 1;
+        buckets[index].push_back(num);
+    }
+
+    vector<int> sorted_arr;
+    for (auto& bucket : buckets) {
+        sort(bucket.begin(), bucket.end());
+        sorted_arr.insert(sorted_arr.end(), bucket.begin(), bucket.end());
+    }
+
+    return sorted_arr;
+}
+
