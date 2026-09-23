@@ -1,14 +1,17 @@
-Complejidad en retos
+##1 Complejidad en retos
+
 #A
 def primero(v):
     return v[0]
 Constante, siempre es 1 paso v(0) sin importar el tamaño del arreglo
+
 #B
 def sumar(v):
     s = 0
     for x in v: s += x
     return s
 Lineal, Recorre 1 vez cada elemento ent si la lista tiene n elemntos hace n procesos
+
 #C
 def pares(v):
     c = 0
@@ -16,11 +19,13 @@ def pares(v):
         for y un v: c += 1
     return c
 cuadratica, por cada elemnto en x se recorre y ed que si x tiene 5 elemntos y se recorrera 5 veces ent seria siempre x^2 
+
 #D
 def mitad(v,x):
     izq, der = 0, len(v) - 1
     while izq... no alcance a verla
 Logaritmica, la def de la misma es que se divide a la mitad en cada paso y es justo lo que hace la función 
+
 #E
 def engañoso(v):
     for i in range(len(v)):
@@ -28,11 +33,5 @@ def engañoso(v):
             print(v[i],j)
 Lineal, porque j se recorre 5 veces sin importar el tamaño de la lista
 
-Tabla de Complejidad
-BuubleSort
-SelectionSort
-InsertionSort
-MergeSort
-QuickSort
-HeapSort
-BucketSort
+##2 Tabla de Complejidad (excel)
+
