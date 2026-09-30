@@ -1,3 +1,5 @@
+#Parte A 
+
 #1 Tengo mil datos ya ordenados y quiero ordenarlos otra vez. ¿Cuál de los tres básicos hace menos trabajo y por qué?
 
 El bubble y el insertion funcionarian de la misma manera, porque
