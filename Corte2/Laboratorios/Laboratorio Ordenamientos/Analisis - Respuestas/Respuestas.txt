@@ -1,0 +1,73 @@
+#1 Tengo mil datos ya ordenados y quiero ordenarlos otra vez. ¿Cuál de los tres básicos hace menos trabajo y por qué?
+
+El bubble y el insertion funcionarian de la misma manera, porque
+recorren el arreglo una sola vez pues en el caso de bubble cuando compara
+ese swapped de la funcion nunca va a pasar porque nunca tendra que cambiar y en el
+insertion comprara los elementos una unica vez porque estan ordenados.
+
+#2 Mi Quicksort escoge el primer elemento como pivote. Denme un conjunto de datos que lo haga comportarse pésimo.
+
+[1,2,3,4,5,6,7,8,9,10,...], como el Quicksort organiza los elementos menores y mayores en
+comparación al pivote, cuando eligue un pivote que ya es el menor o el mayor de los números,
+es decir que no tiene mayores o menores a el, en este caso menores, el no se va a poder dividir
+a la mitad entonces se ira haciendo más pequeño de uno en uno, entonces tendra que hacer el arreglo
+mas pequeño las veces como números de elementos tenga el arreglo
+
+#3 Quiero buscar cien veces sobre una colección de diez mil elementos desordenados. ¿Ordeno primero y uso binaria, o busco secuencial cien veces? Justifiquen.
+
+Es mejor ordenar primero y luego usar la busqueda binaria, porque la busqueda secuencial revisa los elementos
+uno a uno, cada búsqueda revisa en promedio la mitad de los 10.000 elementos
+en cambio ordenar cuesta menos comparaciones una sola vez, y después cada búsqueda binaria tarda mucho menos,
+entonces ordenar vale la pena a partir de unas 27 búsquedas
+
+#Parte D 
+
+#1 ¿Por qué los tiempos crecen distinto entre Bubble Sort y Merge Sort?
+
+Los tiempos crecen distinto porque Bubble Sort tiene complejidad O(n²) mientras que Merge Sort tiene O(n log n).
+Cuando n=100, Bubble hace ~10,000 comparaciones mientras Merge hace ~664. Cuando n=1000, Bubble hace ~1,000,000
+comparaciones mientras Merge hace ~9,965. Esto significa que conforme n aumenta, la diferencia se amplifica exponencialmente.
+Bubble es sensible al tamaño: duplicar n cuadruplica el trabajo. Merge es eficiente: duplicar n solo aumenta el trabajo
+por un factor de ~2.2. Por eso el factor de tiempo entre ellos (tiempo_bubble/tiempo_merge) crece aceleradamente: es la
+diferencia entre n² y n log n.
+
+#Parte F - CI/CD para proyectos con Python y C++
+
+#1 ¿Estás de acuerdo con que Python no necesita CI/CD?
+
+No, CI/CD es igualmente importante para Python que para C++, aunque las necesidades
+sean diferentes. Aunque Python no requiere compilación, sí requiere validación de sintaxis, análisis de calidad,
+testing, y verificación de dependencias. Las pruebas y análisis estáticos son CRÍTICOS en lenguajes dinámicos como
+Python porque los errores de tipo no se detectan hasta runtime.
+
+#Según lo consultado 
+
+#2.1 Propuesta de Pipeline CI/CD para Python:
+1. git push → Ejecutar linter para validar código
+2. Ejecutar pytest con cobertura de tests
+3. Análisis estáticos
+4. Ejecutar benchmarks y comparar con versiones anteriores
+5. Si todo pasa: generar reporte HTML con resultados
+6. Deployment: publicar en PyPI o actualizar servidor
+
+#2.2 Propuesta de Pipeline CI/CD para C++:
+1. git push → Compilar con múltiples compiladores
+2. Ejecutar análisis estático
+3. Ejecutar Google Test suite con cobertura de código
+4. Ejecutar benchmarks en arquitecturas diferentes
+5. Si todo pasa: generar ejecutables optimizados
+6. Deployment: publicar release binaria en GitHub Releases
+
+#3 Implementación de CI/CD para este laboratorio:
+
+Para implementarlo en el laboratorio se puede usar GitHub, que ya trae una 
+herramienta para esto: se crea un archivo de configuración en el proyecto y,
+cada vez que alguien sube cambios, GitHub revisa todo solo. En Python, instala
+lo que el programa necesita y corre las pruebas para comprobar que el algoritmo
+sigue ordenando bien. Si todo sale bien, el programa queda listo para entregarse.
+En C++ es casi igual, pero primero hay que compilar (convertir el código en un programa
+ejecutable) y después se corren las pruebas y se entrega. En los dos casos el orden
+lógico es subir cambios, preparar o compilar, probar y entregar, no ejecutar antes
+de probar como propone el equipo. Por eso no estoy de acuerdo porque el CI/CD no sirve
+solo para compilar, sino para revisar automáticamente que ningún cambio dañe
+el programa, y eso Python también lo necesita.
