@@ -1,0 +1,84 @@
+============================================================
+ PRUEBA CORTA - SEGUNDO CORTE
+ Algoritmos y Estructura de Datos
+ Universidad del Rosario - Escuela de Ingenieria, Ciencia y Tecnologia
+============================================================
+
+QUE HAY EN ESTA CARPETA
+
+  E1/recursion.py     Ejercicio 1 - Python   (25 puntos)  <- MODIFIQUE ESTE
+  E1/pruebas_e1.py    verificacion                        <- NO LO TOQUE
+
+  E2/busqueda.cpp     Ejercicio 2 - C++      (25 puntos)  <- MODIFIQUE ESTE
+  E2/pruebas_e2.cpp   verificacion                        <- NO LO TOQUE
+
+  E3/historial.py     Ejercicio 3 - Python   (25 puntos)  <- MODIFIQUE ESTE
+  E3/pruebas_e3.py    verificacion                        <- NO LO TOQUE
+
+  E4/zonas.cpp        Ejercicio 4 - C++      (25 puntos)  <- MODIFIQUE ESTE
+  E4/pruebas_e4.cpp   verificacion                        <- NO LO TOQUE
+
+  verificar.sh        ejecuta las cuatro pruebas (Linux / macOS)
+  verificar.bat       ejecuta las cuatro pruebas (Windows)
+
+
+COMO EJECUTAR LAS PRUEBAS
+
+  Las cuatro de una vez:
+      Linux / macOS:   bash verificar.sh
+      Windows:         verificar.bat
+
+  Una sola:
+      Linux / macOS:   bash verificar.sh E2
+      Windows:         verificar.bat E2
+
+  O manualmente, entrando a la carpeta del ejercicio:
+      python3 pruebas_e1.py
+      g++ -std=c++17 -g -o pruebas_e2 busqueda.cpp pruebas_e2.cpp && ./pruebas_e2
+      python3 pruebas_e3.py
+      g++ -std=c++17 -g -o pruebas_e4 zonas.cpp pruebas_e4.cpp && ./pruebas_e4
+
+
+CUANDO UN EJERCICIO QUEDA RESUELTO
+
+  Las pruebas imprimen una linea como esta:
+
+      EJERCICIO 1 CERRADO - codigo de cierre: 2201-XXXXX
+
+  Ese codigo NO esta escrito en ningun archivo: se calcula a partir de
+  los resultados correctos. Si su solucion esta mal, el codigo no aparece
+  o aparece distinto.
+
+  Copie los cuatro codigos en la hoja de respuestas.
+
+
+ENTREGA EN EL REPOSITORIO (obligatoria)
+
+  1. Suba las carpetas E1, E2, E3 y E4 con SU codigo a la carpeta
+         prueba-corta-c2/<su-apellido>
+     del repositorio del equipo.
+
+  2. Mensaje del commit:
+         prueba corta c2 - <descripcion>-<apellido> - <nombre>
+
+  3. Suba tambien la carpeta  evidencias/  con UNA captura de pantalla
+     por ejercicio, donde se vea la salida completa de las pruebas y el
+     codigo de cierre.
+
+  4. Haga push ANTES de que termine el tiempo. El commit debe quedar
+     registrado dentro del horario de la prueba.
+
+  5. Muestre a la profesora la salida de las pruebas en su pantalla
+     antes de retirarse.
+
+
+REGLAS
+
+  - Trabajo individual. Sin apuntes compartidos, sin mensajeria, sin IA.
+  - Esta permitido consultar la documentacion oficial de C++ y de Python.
+  - Los archivos pruebas_*.py y pruebas_*.cpp NO se pueden modificar.
+    Alterarlos se considera fraude academico segun la seccion 13 de la
+    guia de asignatura.
+  - No se evalua la velocidad para escribir codigo, sino que la solucion
+    sea correcta y que usted pueda explicarla.
+============================================================
