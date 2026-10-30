@@ -1,4 +1,4 @@
-# 30 Octubre ejercicio
+# 30 Octubre Quiz
 
 class Nodo:
     def __init__(self, c):
