@@ -1,0 +1,1 @@
+El `reto 1` fue realizado en clase entonces se encuentra en `ejercicios y quices` **no** en `retos`
